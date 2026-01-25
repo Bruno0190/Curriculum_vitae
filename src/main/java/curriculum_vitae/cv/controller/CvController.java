@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class CvController {
 
     @GetMapping("/")
-    public String cv() {
-        return "index"; // index.html in templates/
+    public String getCv() {
+        return "index";
     }
 }
