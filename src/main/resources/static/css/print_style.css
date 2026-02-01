@@ -114,13 +114,21 @@
     font-size: 7.5pt !important;
     margin: 0 0 3px 0 !important;
     padding-left: 12px !important;
+    line-height: 1.02 !important;
   }
+
+ #ESPERIENZA li,
+  #ISTRUZIONE li,
+  #LINGUE li {
+    margin-bottom: 3px !important; /* spazio minimo ma visibile */
+  }
+
+
 
   /* ===========================
      FOOTER RIDOTTO E STESO
      =========================== */
   #cv_footer {
-    font-size: 5pt !important;
     line-height: 1.1 !important;
     margin: 2mm 0 0 0 !important;
     padding: 0 !important;
