@@ -9,16 +9,20 @@
  
     <script src="script.js"></script>
 
+    <link rel="stylesheet" href="/css/print_style.css">
+
 </head>
-<body>
+<body class="print-tight">
     
-    <div class="container m-5">
-        <div class="row">
+    <div id="container_cv" class="container">
+        <div id="row_cv" class="row">
 
             <div class="col-12 col-lg-4 left-col">
 
-                <img src="/src/main/resources/static/picture/Foto.jpg" class="img-fluid py-0 px-3 rounded-5 mx-5 my-3" style="max-width:350px;" alt="Foto">
-
+                <section id="FOTO">
+                    <img src="/images/Foto.jpg" class="img-fluid py-0 px-3 rounded-5 mx-5 my-3" style="max-width:350px;" alt="Foto">
+                </section>
+                
                 <section id="CONTATTI" class="py-0 px-3 mx-5 my-3">
                     <h4 style="font-size: 25px">CONTATTI</h4>
                     <a href="mailto:bruno.varadero90@gmail.com">bruno.varadero90@gmail.com</a><br>
@@ -28,7 +32,7 @@
                     <a href="https://github.com/Bruno0190" target="_blank">GitHub</a>
                 </section>
 
-                <section id="COMPETENZE TECNICHE" class="py-0 px-3 mx-5 my-3">
+                <section id="COMPETENZE_TECNICHE" class="py-0 px-3 mx-5 my-3">
                     <h4 style="font-size: 25px">COMPETENZE TECNICHE</h4>
                     <ul>
                         <li>HTML</li>
@@ -56,8 +60,11 @@
 
             <div class="col-12 col-lg-8 right-col">
 
-                <h2 style="font-size: 45px;">Bruno Padula</h2>
-                <h3 style="font-size: 30px; margin-bottom: 30px;">Technical Project Manager - Back-end Developer</h3>
+                <section id="NOME_TITOLO" class="mb-3">
+                    <h2 style="font-size: 45px;">Bruno Padula</h2>
+                    <h3 style="font-size: 30px; margin-bottom: 30px;">Technical Project Manager - Back-end Developer</h3>
+                </section>
+                
 
                 <section id="PROFILO" class="mb-3">
                     <h3 style="font-size: 25px;color:cornflowerblue;">PROFILO</h3>
@@ -181,15 +188,15 @@
         </div>
     </div>
     
-    <footer class="d-flex justify-content-between m-3">
-        <div>
+    <footer id="cv_footer" class="d-flex justify-content-between m-3">
+        <div class="bottone_scarica_pdf">
             <button onclick="window.location.href='/genera-pdf'">
                 Scarica PDF
             </button>
         </div>
-        <div class="text-center" style="font-size: 12px;">
+        <p id="trattamento_dati" class="text-end" style="font-size: 12px;">
             Autorizzo il trattamento dei miei dati personali presenti<br> nel CV ai sensi dell’art. 13 d. lgs. 30 giugno 2003 n. 196-<br> “Codice in materia di protezione dei dati personali”<br> e dell’art. 13 GDPR 679/16 -
-        </div>
+        </p>
     </footer>
 </body>
 </html>
