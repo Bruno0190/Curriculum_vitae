@@ -1,51 +1,48 @@
 package curriculum_vitae.cv.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-import java.util.List;
-
-import jakarta.persistence.Column;
 
 @Entity
-@Table(name = "experiences")
-public class experience {
+@Table(name = "jobs")
+public class job {
 
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String companyName;
+    @Column(name = "job_title")
+    @NotBlank
+    private String jobTitle;
 
-    @Column
+    @Column(nullable = false)
+    @NotBlank
     private Integer startMonth;
+    @NotBlank
     private Integer startYear;
     private Integer endMonth;
     private Integer endYear;
-    private Boolean inProgress;
+    private Boolean inProgress;  
 
-    @Column(length = 2000)
-    private String company_description;
+    private java.util.List<job_task> jobTask;
 
-    @Column
-    private List<job> jobs;
-
-    public experience() {
+    public job() {
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public String getJobTitle() {
+        return jobTitle;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
     }
 
     public Integer getStartMonth() {
@@ -62,7 +59,7 @@ public class experience {
 
     public void setStartYear(Integer startYear) {
         this.startYear = startYear;
-    }
+    }   
 
     public Integer getEndMonth() {
         return endMonth;
@@ -80,28 +77,20 @@ public class experience {
         this.endYear = endYear;
     }
 
-    public String getCompany_description() {
-        return company_description;
-    }
-
-    public void setCompany_description(String company_description) {
-        this.company_description = company_description;
-    }   
-
-    public List<job> getJobs() {
-        return jobs;
-    }
-
-    public void setJobs(List<job> jobs) {
-        this.jobs = jobs;
-    }
-
     public Boolean getInProgress() {
         return inProgress;
     }
 
     public void setInProgress(Boolean inProgress) {
         this.inProgress = inProgress;
+    }
+
+    public java.util.List<job_task> getJobTask() {
+        return jobTask;
+    }
+
+    public void setJobTask(java.util.List<job_task> jobTask) {
+        this.jobTask = jobTask;
     }
 
 }

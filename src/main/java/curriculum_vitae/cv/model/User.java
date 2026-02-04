@@ -1,9 +1,10 @@
 package curriculum_vitae.cv.model;
 
-import jakarta.annotation.Generated;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -12,11 +13,14 @@ import jakarta.validation.constraints.Size;
 @Table(name = "users")
 public class User {
 
+    @OneToOne(mappedBy = "user")
+    private curriculum curriculum;
+
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Name is mandatory")
+    @NotBlank(message = "Complete name is mandatory")
     @Size(max = 100, message = "Name cannot exceed 100 characters")
     private String name;
 
