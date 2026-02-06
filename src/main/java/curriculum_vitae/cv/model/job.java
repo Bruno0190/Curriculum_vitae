@@ -6,10 +6,23 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "jobs")
-public class job {
+public class Job {
+
+    /* Relazioni */
+    @ManyToOne
+    @JoinColumn(name = "experience_id")
+    private Experience experience;
+
+    @OneToMany(mappedBy = "job", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+    private List<JobTask> jobTask;
 
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
@@ -28,9 +41,9 @@ public class job {
     private Integer endYear;
     private Boolean inProgress;  
 
-    private java.util.List<job_task> jobTask;
 
-    public job() {
+
+    public Job() {
     }
 
     public Long getId() {
@@ -85,12 +98,21 @@ public class job {
         this.inProgress = inProgress;
     }
 
-    public java.util.List<job_task> getJobTask() {
+    public java.util.List<JobTask> getJobTask() {
         return jobTask;
     }
 
-    public void setJobTask(java.util.List<job_task> jobTask) {
+    public void setJobTask(java.util.List<JobTask> jobTask) {
         this.jobTask = jobTask;
+    }
+
+    /* Getter e Setter */
+    public Experience getExperience() {
+        return experience;
+    }
+
+    public void setExperience(Experience experience) {
+        this.experience = experience;
     }
 
 }

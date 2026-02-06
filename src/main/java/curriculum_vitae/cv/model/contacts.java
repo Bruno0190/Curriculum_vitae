@@ -4,13 +4,19 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "contacts")
-public class contacts {
+public class Contacts {
 
+    /* Relazioni */
+    @OneToOne(mappedBy = "contacts")
+    private Curriculum curriculum;
+
+    /* Attributi */
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long contact_id;
@@ -32,9 +38,11 @@ public class contacts {
     @Column
     private String contact_portfolio;
 
-    public contacts() {
+    /* Costruttore */
+    public Contacts() {
     }
 
+    /* Getter e Setter */
     public Long getContact_id() {
         return contact_id;
     }
@@ -79,4 +87,11 @@ public class contacts {
         this.contact_portfolio = contact_portfolio;
     }
 
+    public Curriculum getCurriculum() {
+        return curriculum;
+    }
+
+    public void setCurriculum(Curriculum curriculum) {
+        this.curriculum = curriculum;
+    }
 }

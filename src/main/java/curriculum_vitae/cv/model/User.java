@@ -13,9 +13,11 @@ import jakarta.validation.constraints.Size;
 @Table(name = "users")
 public class User {
 
+    /* Relazioni */
     @OneToOne(mappedBy = "user")
-    private curriculum curriculum;
+    private Curriculum curriculum;
 
+    /* Attributi */
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
@@ -32,9 +34,11 @@ public class User {
     @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
 
+    /* Costruttore */
     public User() {
     }
 
+    /* Getter e Setter */
     public Long getId() {
         return id;
     }
@@ -63,6 +67,13 @@ public class User {
         this.password = password;
     }
     
+    public Curriculum getCurriculum() {
+        return curriculum;
+    }
 
+    public void setCurriculum(Curriculum curriculum) {
+        this.curriculum = curriculum;
+    }
+    
 
 }

@@ -5,20 +5,46 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+
+import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.CascadeType;
 
 
 @Entity
 @Table(name = "curriculums")
-public class curriculum {
+public class Curriculum {
 
+    /* Relazioni */
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "curriculum", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Skill> skills = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "contact_id")
+    private Contacts contacts;
+
+    @OneToMany(mappedBy = "curriculum", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Projects> projects = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "experience_id")
+    private Experience experience;
+
+    @OneToMany(mappedBy = "curriculum", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Education> educations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "curriculum", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Language> languages = new ArrayList<>();
+
+    /* Attributi */
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
@@ -34,27 +60,11 @@ public class curriculum {
     @NotBlank(message = "Profile description is mandatory")
     private String profile_description;
 
-    @Column()
-    private contacts contacts;
-
-    @Column()
-    private List<skill> skills;
-
-    @Column()
-    private List<projects> projects;
-
-    @Column()
-    private experience experience;
-
-    @Column()
-    private List<education> educations;
-
-    @Column()
-    private List<language> languages;
-
-    public curriculum() {
+    /* Costruttore */
+    public Curriculum() {
     }
 
+    /* Getter e Setter */
     public Long getId() {
         return id;
     }
@@ -87,51 +97,51 @@ public class curriculum {
         this.profile_description = profile_description;
     }
 
-    public contacts getContacts() {
+    public Contacts getContacts() {
         return contacts;
     }
 
-    public void setContacts(contacts contacts) {
+    public void setContacts(Contacts contacts) {
         this.contacts = contacts;
     }
 
-    public List<skill> getSkills() {
+    public List<Skill> getSkills() {
         return skills;
     }
 
-    public void setSkills(List<skill> skills) {
+    public void setSkills(List<Skill> skills) {
         this.skills = skills;
     }
 
-    public List<projects> getProjects() {
+    public List<Projects> getProjects() {
         return projects;
     }
 
-    public void setProjects(List<projects> projects) {
+    public void setProjects(List<Projects> projects) {
         this.projects = projects;
     }
 
-    public experience getExperience() {
+    public Experience getExperience() {
         return experience;
     }
 
-    public void setExperience(experience experience) {
+    public void setExperience(Experience experience) {
         this.experience = experience;
     }
 
-    public List<education> getEducations() {
+    public List<Education> getEducations() {
         return educations;
     }
 
-    public void setEducations(List<education> educations) {
+    public void setEducations(List<Education> educations) {
         this.educations = educations;
     }
 
-    public List<language> getLanguages() {
+    public List<Language> getLanguages() {
         return languages;
     }
 
-    public void setLanguages(List<language> languages) {
+    public void setLanguages(List<Language> languages) {
         this.languages = languages;
     }
 

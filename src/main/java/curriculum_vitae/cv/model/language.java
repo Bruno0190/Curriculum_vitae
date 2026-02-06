@@ -5,10 +5,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 
 @Entity
 @Table(name = "languages")
-public class language {
+public class Language {
+
+    /* Relazioni */
+    @ManyToOne
+    @JoinColumn(name = "curriculum_id")
+    private Curriculum curriculum;
 
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
@@ -23,8 +30,11 @@ public class language {
     @Column
     private String school_String;
 
-    public language() {
+    public Language() {
     }
+
+    /* Costruttore */
+
 
     public Long getId() {
         return id;
@@ -52,6 +62,15 @@ public class language {
 
     public void setSchool_String(String school_String) {
         this.school_String = school_String;
+    }
+
+    /* Getter e Setter */
+    public Curriculum getCurriculum() {
+        return curriculum;
+    }
+
+    public void setCurriculum(Curriculum curriculum) {
+        this.curriculum = curriculum;
     }
 
 }

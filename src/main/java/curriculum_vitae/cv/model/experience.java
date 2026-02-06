@@ -3,16 +3,29 @@ package curriculum_vitae.cv.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 
 @Entity
 @Table(name = "experiences")
-public class experience {
+public class Experience {
 
+    /* Relazioni */
+    @OneToOne(mappedBy = "experience")
+    private Curriculum curriculum;
+
+    @OneToMany(mappedBy = "experience", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Job> jobs = new ArrayList<>();
+
+    /* Attributi */
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
@@ -30,12 +43,12 @@ public class experience {
     @Column(length = 2000)
     private String company_description;
 
-    @Column
-    private List<job> jobs;
 
-    public experience() {
+    /* Costruttore */
+    public Experience() {
     }
 
+    /* Getter e Setter */
     public Long getId() {
         return id;
     }
@@ -88,11 +101,11 @@ public class experience {
         this.company_description = company_description;
     }   
 
-    public List<job> getJobs() {
+    public List<Job> getJobs() {
         return jobs;
     }
 
-    public void setJobs(List<job> jobs) {
+    public void setJobs(List<Job> jobs) {
         this.jobs = jobs;
     }
 
@@ -104,4 +117,12 @@ public class experience {
         this.inProgress = inProgress;
     }
 
+    public Curriculum getCurriculum() {
+        return curriculum;
+    }
+
+    public void setCurriculum(Curriculum curriculum) {
+        this.curriculum = curriculum;
+    }
+    
 }

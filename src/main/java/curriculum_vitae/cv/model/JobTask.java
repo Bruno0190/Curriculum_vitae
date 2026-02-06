@@ -11,12 +11,14 @@ import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "job_tasks")
-public class job_task {
+public class JobTask {
 
+    /* Relazioni */
     @ManyToOne
     @JoinColumn(name = "job_id")
     private Job job;
 
+    /* Attributi */
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
@@ -28,9 +30,11 @@ public class job_task {
     @Column
     private String task_description;
 
-    public job_task() {
+    /* Costruttore */
+    public JobTask() {
     }
 
+    /* Getter e Setter */
     public Long getId() {
         return id; 
     }
@@ -55,5 +59,12 @@ public class job_task {
         this.task_description = task_description;
     }
 
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
+    }
 
 }

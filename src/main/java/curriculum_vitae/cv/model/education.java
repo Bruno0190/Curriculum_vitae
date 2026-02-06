@@ -3,13 +3,22 @@ package curriculum_vitae.cv.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;  
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
+import java.util.ArrayList;
+import jakarta.persistence.JoinColumn;
 
 @Entity
 @Table(name = "educations")
-public class education {
+public class Education {
+
+    /* Relazioni */
+    @ManyToOne
+    @JoinColumn(name = "curriculum_id")
+    private Curriculum curriculum;
 
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
@@ -37,8 +46,11 @@ public class education {
     @Column()
     private String link;
 
-    public education() {
+    public Education() {
     }
+
+    /* Costruttore */
+    
 
     public Long getId() {
         return id;
@@ -114,6 +126,15 @@ public class education {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    /* Getter e Setter */
+    public Curriculum getCurriculum() {
+        return curriculum;
+    }
+
+    public void setCurriculum(Curriculum curriculum) {
+        this.curriculum = curriculum;
     }
 
 
