@@ -24,6 +24,7 @@ public class Job {
     @OneToMany(mappedBy = "job", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
     private List<JobTask> jobTask;
 
+    /* Attributi */
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
@@ -42,10 +43,11 @@ public class Job {
     private Boolean inProgress;  
 
 
-
+    /* Costruttore */
     public Job() {
     }
 
+    /* Getter e Setter */
     public Long getId() {
         return id;
     }
@@ -106,7 +108,6 @@ public class Job {
         this.jobTask = jobTask;
     }
 
-    /* Getter e Setter */
     public Experience getExperience() {
         return experience;
     }

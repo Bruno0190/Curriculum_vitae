@@ -17,6 +17,7 @@ public class Language {
     @JoinColumn(name = "curriculum_id")
     private Curriculum curriculum;
 
+    /* Attributi */
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
@@ -30,11 +31,11 @@ public class Language {
     @Column
     private String school_String;
 
+    /* Costruttore */
     public Language() {
     }
 
-    /* Costruttore */
-
+    /* Getter e Setter */
 
     public Long getId() {
         return id;

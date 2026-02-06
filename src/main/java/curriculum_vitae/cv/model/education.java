@@ -20,6 +20,7 @@ public class Education {
     @JoinColumn(name = "curriculum_id")
     private Curriculum curriculum;
 
+    /* Attributi */
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
@@ -46,12 +47,11 @@ public class Education {
     @Column()
     private String link;
 
+    /* Costruttore */
     public Education() {
     }
-
-    /* Costruttore */
     
-
+    /* Getter e Setter */
     public Long getId() {
         return id;
     }
@@ -128,7 +128,6 @@ public class Education {
         this.link = link;
     }
 
-    /* Getter e Setter */
     public Curriculum getCurriculum() {
         return curriculum;
     }

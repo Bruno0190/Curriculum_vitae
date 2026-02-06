@@ -97,12 +97,12 @@ public class Curriculum {
         this.profile_description = profile_description;
     }
 
-    public Contacts getContacts() {
-        return contacts;
+    public User getUser() {
+        return user;
     }
 
-    public void setContacts(Contacts contacts) {
-        this.contacts = contacts;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<Skill> getSkills() {
@@ -111,6 +111,14 @@ public class Curriculum {
 
     public void setSkills(List<Skill> skills) {
         this.skills = skills;
+    }
+
+    public Contacts getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(Contacts contacts) {
+        this.contacts = contacts;
     }
 
     public List<Projects> getProjects() {
@@ -144,6 +152,5 @@ public class Curriculum {
     public void setLanguages(List<Language> languages) {
         this.languages = languages;
     }
-
 
 }
