@@ -1,396 +1,211 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curriculum Vitae</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+ 
+    <script src="script.js"></script>
 
-    <!-- Link bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/print_style.css">
 
-    <title>Create Curriculum</title>
 </head>
-<body>
-    <div th:replace="fragments/navbar :: navbar"></div>
+<body class="print-tight">
+    
+    <div id="container_cv" class="container">
+        <form th:action ="@{/curriculums/create}" id="row_cv" class="row" method="post" th:object="${curriculum}" enctype="multipart/form-data">
+            <!-- COLONNA SINISTRA -->
+            <div class="col-12 col-lg-4 left-col">
+                <!-- SEZIONE FOTO -->
+                <section id="FOTO">
+                    <label for="image_profile_Url" class="form-label">Add Profile Picture</label>
+                    <input th:field="*{image_profile_Url}" class="form-control img-fluid py-0 px-3 rounded-5 mx-5 my-3" style="max-width:350px;" type="file" id="image_profile_Url" accept="image/*">
+                </section>
+                <!-- SEZIONE CONTATTI -->          
+                <section id="CONTATTI" class="py-0 px-3 mx-5 my-3">
+                    <label for="contact_email"></label>
+                    <label for="contact_phone"></label>
+                    <label for="contact_linkedin"></label>
+                    <label for="contact_github"></label>
+                    <label for="contact_portfolio"></label>
 
-    <div id="container_cv" class="container mt-5">
 
-        <h2 class="mb-4">Crea il tuo Curriculum</h2>
 
-        <form th:action="@{/curriculums}" th:object="${curriculum}" method="post" enctype="multipart/form-data">
+                    <h4 style="font-size: 25px">CONTATTI</h4>
+                    <a href="mailto:bruno.varadero90@gmail.com">bruno.varadero90@gmail.com</a><br>
+                    <a href="tel:+39330949857">+(39) 330 949 857</a><br>
+                    <a href="https://www.linkedin.com/in/bruno-padula-b35732257/" target="_blank">LinkedIn</a>
+                    <span> | </span>
+                    <a href="https://github.com/Bruno0190" target="_blank">GitHub</a>
+                </section>
 
-            <div id="row_cv" class="row">
+                <section id="COMPETENZE_TECNICHE" class="py-0 px-3 mx-5 my-3">
+                    <h4 style="font-size: 25px">COMPETENZE TECNICHE</h4>
+                    <ul>
+                        <li>HTML</li>
+                        <li>CSS</li>
+                        <li>JavaScript</li>
+                        <li>Java</li>
+                        <li>MySQL</li>
+                        <li>Spring/Spring Boot</li>
+                    </ul>
+                </section>
 
-                <!-- COLONNA SINISTRA -->
-                <div class="col-12 col-lg-4 left-col">
-                    
-                    <!-- FOTO -->
-                    <section id="FOTO" class="py-0 px-3 mx-5 my-3">
-                        <label for="image_profile_Url" class="form-label">FOTO PROFILO</label>
-                        <input type="file" class="form-control" id="image_profile_Url" th:field="*{image_profile_Url}" accept="image/*">
-                    </section>
-
-                    <!-- CONTATTI -->
-                    <section id="CONTATTI" class="py-0 px-3 mx-5 my-3">
-                        <h4 style="font-size: 25px">CONTATTI</h4>
-                        <div class="mb-3">
-                            <label for="contact_email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="contact_email" th:field="*{contacts.contact_email}" placeholder="esempio@email.com">
-                        </div>
-                        <div class="mb-3">
-                            <label for="contact_phone" class="form-label">Telefono</label>
-                            <input type="tel" class="form-control" id="contact_phone" th:field="*{contacts.contact_phone}" placeholder="+39 123 456 7890">
-                        </div>
-                        <div class="mb-3">
-                            <label for="contact_linkedin" class="form-label">LinkedIn</label>
-                            <input type="url" class="form-control" id="contact_linkedin" th:field="*{contacts.contact_linkedin}" placeholder="https://linkedin.com/in/...">
-                        </div>
-                        <div class="mb-3">
-                            <label for="contact_github" class="form-label">GitHub</label>
-                            <input type="url" class="form-control" id="contact_github" th:field="*{contacts.contact_github}" placeholder="https://github.com/...">
-                        </div>
-                        <div class="mb-3">
-                            <label for="contact_portfolio" class="form-label">Portfolio</label>
-                            <input type="url" class="form-control" id="contact_portfolio" th:field="*{contacts.contact_portfolio}" placeholder="https://...">
-                        </div>
-                    </section>
-
-                    <!-- COMPETENZE TECNICHE -->
-                    <section id="COMPETENZE_TECNICHE" class="py-0 px-3 mx-5 my-3">
-                        <h4 style="font-size: 25px">COMPETENZE TECNICHE</h4>
-                        <div id="skills-container">
-                            <div class="mb-2" th:each="skill, iterStat : *{skills}">
-                                <input type="text" class="form-control" th:field="*{skills[__${iterStat.index}__].skill_name}" placeholder="Aggiungi una competenza">
-                            </div>
-                            <div class="mb-2">
-                                <input type="text" class="form-control" placeholder="Aggiungi una competenza">
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-primary" onclick="addSkill()">+ Aggiungi Competenza</button>
-                    </section>
-
-                    <!-- PROGETTI -->
-                    <section id="PROGETTI" class="py-0 px-3 mx-5 my-3">
-                        <h4 style="font-size: 25px">PROGETTI</h4>
-                        <div id="projects_container">
-                            <div th:each="project, iterStat : *{projects}" class="mb-3">
-                                <div class="mb-2">
-                                    <label class="form-label">Nome Progetto</label>
-                                    <input type="text" class="form-control" th:field="*{projects[__${iterStat.index}__].projectName}" placeholder="Nome progetto">
-                                </div>
-                                <div class="mb-2">
-                                    <label class="form-label">Descrizione</label>
-                                    <textarea class="form-control" rows="2" th:field="*{projects[__${iterStat.index}__].description}" placeholder="Descrizione progetto"></textarea>
-                                </div>
-                                <div class="mb-2">
-                                    <label class="form-label">URL</label>
-                                    <input type="url" class="form-control" th:field="*{projects[__${iterStat.index}__].url}" placeholder="https://...">
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <div class="mb-2">
-                                    <label class="form-label">Nome Progetto</label>
-                                    <input type="text" class="form-control" placeholder="Nome progetto">
-                                </div>
-                                <div class="mb-2">
-                                    <label class="form-label">Descrizione</label>
-                                    <textarea class="form-control" rows="2" placeholder="Descrizione progetto"></textarea>
-                                </div>
-                                <div class="mb-2">
-                                    <label class="form-label">URL</label>
-                                    <input type="url" class="form-control" placeholder="https://...">
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-primary" onclick="addProject()">+ Aggiungi Progetto</button>
-                    </section>
-
-                </div>
-
-                <!-- COLONNA DESTRA -->
-                <div class="col-12 col-lg-8 right-col">
-
-                    <!-- NOME E TITOLO -->
-                    <section id="NOME_TITOLO" class="mb-3">
-                        <div class="mb-3">
-                            <label for="profile_name" class="form-label">Nome Completo</label>
-                            <input type="text" class="form-control" id="profile_name" th:field="*{user.name}" placeholder="Bruno Padula">
-                        </div>
-                        <div class="mb-3">
-                            <label for="profile_role" class="form-label">Titolo Professionale</label>
-                            <input type="text" class="form-control" id="profile_role" th:field="*{profile_role}" placeholder="Technical Project Manager - Back-end Developer">
-                        </div>
-                    </section>
-
-                    <!-- PROFILO -->
-                    <section id="PROFILO" class="mb-3">
-                        <h3 style="font-size: 25px;color:cornflowerblue;">PROFILO</h3>
-                        <div class="mb-3">
-                            <label for="profile_description" class="form-label">Descrizione Profilo</label>
-                            <textarea class="form-control" id="profile_description" th:field="*{profile_description}" rows="5" placeholder="Descrivi il tuo profilo..."></textarea>
-                        </div>
-                    </section>
-
-                    <!-- ESPERIENZA -->
-                    <section id="ESPERIENZA" class="mb-3">
-                        <h3 style="font-size: 25px;color:cornflowerblue;">ESPERIENZA</h3>
-                        <div class="mb-3">
-                            <label for="companyName" class="form-label">Nome Azienda</label>
-                            <input type="text" class="form-control" id="companyName" th:field="*{experience.companyName}" placeholder="Nome azienda">
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="startMonth" class="form-label">Mese Inizio</label>
-                                <input type="number" class="form-control" id="startMonth" th:field="*{experience.startMonth}" min="1" max="12" placeholder="01">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="startYear" class="form-label">Anno Inizio</label>
-                                <input type="number" class="form-control" id="startYear" th:field="*{experience.startYear}" placeholder="2020">
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <label for="endMonth" class="form-label">Mese Fine</label>
-                                <input type="number" class="form-control" id="endMonth" th:field="*{experience.endMonth}" min="1" max="12" placeholder="12">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="endYear" class="form-label">Anno Fine</label>
-                                <input type="number" class="form-control" id="endYear" th:field="*{experience.endYear}" placeholder="2025">
-                            </div>
-                        </div>
-                        <div class="form-check mt-3">
-                            <input class="form-check-input" type="checkbox" id="inProgress" th:field="*{experience.inProgress}">
-                            <label class="form-check-label" for="inProgress">Lavoro attuale</label>
-                        </div>
-                        <div class="mt-3">
-                            <label for="company_description" class="form-label">Descrizione Azienda</label>
-                            <textarea class="form-control" id="company_description" th:field="*{experience.company_description}" rows="3" placeholder="Descrizione dell'azienda..."></textarea>
-                        </div>
-                    </section>
-
-                    <!-- ISTRUZIONE -->
-                    <section id="ISTRUZIONE" class="mb-3">
-                        <h3 style="font-size: 25px;color:cornflowerblue;">ISTRUZIONE E FORMAZIONE</h3>
-                        <div id="educations-container">
-                            <div th:each="education, iterStat : *{educations}" class="mb-3 p-3 border rounded">
-                                <div class="mb-3">
-                                    <label class="form-label">Titolo</label>
-                                    <input type="text" class="form-control" th:field="*{educations[__${iterStat.index}__].title}" placeholder="Titolo corso/diploma">
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Mese Inizio</label>
-                                        <input type="number" class="form-control" th:field="*{educations[__${iterStat.index}__].startMonth}" min="1" max="12" placeholder="01">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Anno Inizio</label>
-                                        <input type="number" class="form-control" th:field="*{educations[__${iterStat.index}__].startYear}" placeholder="2020">
-                                    </div>
-                                </div>
-                                <div class="row mt-2">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Mese Fine</label>
-                                        <input type="number" class="form-control" th:field="*{educations[__${iterStat.index}__].endMonth}" min="1" max="12" placeholder="12">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Anno Fine</label>
-                                        <input type="number" class="form-control" th:field="*{educations[__${iterStat.index}__].endYear}" placeholder="2025">
-                                    </div>
-                                </div>
-                                <div class="form-check mt-2">
-                                    <input class="form-check-input" type="checkbox" th:field="*{educations[__${iterStat.index}__].inProgress}">
-                                    <label class="form-check-label">In corso</label>
-                                </div>
-                                <div class="mt-3">
-                                    <label class="form-label">Descrizione</label>
-                                    <textarea class="form-control" th:field="*{educations[__${iterStat.index}__].description}" rows="2" placeholder="Descrizione..."></textarea>
-                                </div>
-                                <div class="mt-3">
-                                    <label class="form-label">Link Certificato</label>
-                                    <input type="url" class="form-control" th:field="*{educations[__${iterStat.index}__].link}" placeholder="https://...">
-                                </div>
-                            </div>
-                            <div class="mb-3 p-3 border rounded">
-                                <div class="mb-3">
-                                    <label class="form-label">Titolo</label>
-                                    <input type="text" class="form-control" placeholder="Titolo corso/diploma">
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Mese Inizio</label>
-                                        <input type="number" class="form-control" min="1" max="12" placeholder="01">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Anno Inizio</label>
-                                        <input type="number" class="form-control" placeholder="2020">
-                                    </div>
-                                </div>
-                                <div class="row mt-2">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Mese Fine</label>
-                                        <input type="number" class="form-control" min="1" max="12" placeholder="12">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Anno Fine</label>
-                                        <input type="number" class="form-control" placeholder="2025">
-                                    </div>
-                                </div>
-                                <div class="form-check mt-2">
-                                    <input class="form-check-input" type="checkbox">
-                                    <label class="form-check-label">In corso</label>
-                                </div>
-                                <div class="mt-3">
-                                    <label class="form-label">Descrizione</label>
-                                    <textarea class="form-control" rows="2" placeholder="Descrizione..."></textarea>
-                                </div>
-                                <div class="mt-3">
-                                    <label class="form-label">Link Certificato</label>
-                                    <input type="url" class="form-control" placeholder="https://...">
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-primary" onclick="addEducation()">+ Aggiungi Istruzione</button>
-                    </section>
-
-                    <!-- LINGUE -->
-                    <section id="LINGUE" class="mb-3">
-                        <h3 style="font-size: 25px;color:cornflowerblue;">LINGUE</h3>
-                        <div id="languages-container">
-                            <div th:each="language, iterStat : *{languages}" class="mb-3">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Lingua</label>
-                                        <input type="text" class="form-control" th:field="*{languages[__${iterStat.index}__].language_name}" placeholder="Italiano">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Livello</label>
-                                        <input type="text" class="form-control" th:field="*{languages[__${iterStat.index}__].proficiency_level}" placeholder="Madrelingua">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Lingua</label>
-                                        <input type="text" class="form-control" placeholder="Italiano">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Livello</label>
-                                        <input type="text" class="form-control" placeholder="Madrelingua">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-primary" onclick="addLanguage()">+ Aggiungi Lingua</button>
-                    </section>
-
-                    <!-- BOTTONI AZIONE -->
-                    <section id="ACTIONS" class="mb-3 mt-4">
-                        <button type="submit" class="btn btn-success btn-lg me-2">Crea Curriculum</button>
-                        <a href="/" class="btn btn-secondary btn-lg">Annulla</a>
-                    </section>
-
-                </div>
-
+                <section id="PROGETTI" class="py-0 px-3 mx-5 my-3">
+                    <h4 style="font-size: 25px">PROGETTI</h4>
+                    <ul>
+                        <li><strong>Ticket platform - Boolean tech academy:</strong><br>
+                            Backoﬃce per la piattaforma di richieste supporto per assistenza tecnica di un prodotto.
+                        </li>
+                        <li><strong>Agency Form – Luise Associates Srl:</strong><br>
+                            Ecosistema digitale completamente integrato, dove Google Forms, Outlook, PDF Forms e Excel sono stati collegati tramite JavaScript e macro VBA in un unico workflow automatizzato per raccolta dati, gestione documentale e generazione delle pratiche marittime.
+                        </li>
+                    </ul>
+                </section>
+        
             </div>
 
+            <div class="col-12 col-lg-8 right-col">
+
+                <section id="NOME_TITOLO" class="mb-3">
+                    <h2 style="font-size: 45px;">Bruno Padula</h2>
+                    <h3 style="font-size: 30px; margin-bottom: 30px;">Technical Project Manager - Back-end Developer</h3>
+                </section>
+                
+
+                <section id="PROFILO" class="mb-3">
+                    <h3 style="font-size: 25px;color:cornflowerblue;">PROFILO</h3>
+                    <p style="margin-bottom: 20px;">
+                        Dieci anni di esperienza nella gestione operativa e amministrativa nel settore raccomandatario marittimo, con specializzazione recente in sviluppo web. Ho fondato e coordinato un dipartimento operativo, conseguendo risultati concreti (fatturato di ~820.000€ e 2.400+ pratiche gestite). Attualmente approfondisco Data Analytics e Power BI per integrare analisi avanzata nei progetti di trasformazione digitale.
+                    </p>
+                </section>
+
+                <section id="ESPERIENZA" class="mb-3">
+                    <h3 style="font-size: 25px;color:cornflowerblue;">ESPERIENZA</h3>
+                    <h4 style="font-size: 20px">
+                        <strong>Luise Associates Srl, Napoli<br>(02/2016 - 10/2025)</strong>
+                    </h4>
+                    <h4 style="font-size: 16px; font-weight:400;">
+                        <em>Agenzia marittima leader in assistenza yachting e servizi amministrativi per grandi navi da diporto private e commerciali
+                        </em>
+                    </h4>
+                    <h5 style="font-size: 16px">
+                        <u>Responsabile amministrativo</u><br>
+                        <span class="text-muted">(01/2025 - 10/2025)</span>
+                    </h5>
+                    <ul>
+                        <li><strong>Governance & Compliance: </strong>
+                            delega con procura institoria per la gestione e firma di atti amministrativi
+                        </li>
+                        <li><strong>Project Management Tools & Methodologies: </strong>
+                            supervisione completa del dipartimento Formalities (4 risorse)
+                        </li>
+                        <li><strong>Digital Transformation & System Integration: </strong>
+                            consolidamento del sistema digitale e sviluppo di una versione avanzata
+                        </li>
+                        <li><strong>KPI Monitoring: </strong>
+                            2.400+ comunicazioni, 200+ imbarchi, 260 sbarchi, 600+ pratiche ambientali, fatturato ~820.000€
+                        </li>
+                    </ul>
+                    <h5 style="font-size: 16px">
+                        <u>Responsabile operativo</u><br>
+                        <span class="text-muted">(07/2021-12/2024)</span>
+                    </h5>
+                    <ul>
+                        <li><strong>Process Automation: </strong>
+                            creazione del nuovo dipartimento Formalities, struttura e standard operativi
+                        </li>
+                        <li><strong>Project Management Tools & Methodologies: </strong>
+                            selezione, formazione e affiancamento del personale
+                        </li>
+                        <li><strong>Digital Transformation & System Integration: </strong>
+                            avvio della creazione di un sistema digitale interno (2023–2024)
+                        </li>
+                        <li><strong>KPI Monitoring: </strong>
+                            1.300+ comunicazioni, 80 imbarchi/sbarchi, fatturato ~762.560€
+                        </li>
+                    </ul>
+                    <h5 style="font-size: 16px">
+                        <u>Agente di Sicurezza impianto portuale deputa</u><br>
+                        <span class="text-muted">(11/2016 – 01/2025)</span>
+                    </h5>
+                    <ul>
+                        <li><strong>Compliance & Risk Management: </strong>
+                            revisione e custodia del Port Facility Security Plan
+                        </li>
+                        <li><strong>Project Management Tools & Methodologies: </strong>
+                            coordinamento personale sicurezza, pianificazione ed esecuzione di esercitazioni e addestramento
+                        </li>
+                        <li><strong>Governance & Audit: </strong>
+                            gestione ispezioni annuali con Capitaneria
+                        </li>
+                    </ul>
+                    <h5 style="font-size: 16px">
+                        <u>Impiegato addetto al disbrigo pratiche</u><br>
+                        <span class="text-muted">(02/2016 – 06/2021)</span>
+                    </h5>
+                    <ul>
+                        <li><strong>Operational Support: </strong>
+                            pratiche Capitaneria, Dogana, Sanità per navi in arrivo/partenza, pratiche di frontiera (cambio equipaggi stranieri, rilascio visti Schengen)
+                        </li>
+                        <li><strong>Document Management and Compliance: </strong>
+                            coordinamento operativo con autorità e terminal; controllo documentale IMO/ISPS/SOLAS
+                        </li>
+                        <li><strong>KPI Monitoring: </strong>
+                            comunicazioni 60→300+, imbarchi/sbarchi 20→50, pratiche ambientali 5→100
+                        </li>
+                    </ul>
+                </section>
+
+                <section id="ISTRUZIONE" class="mb-3">
+                    <h3 style="font-size: 25px;color:cornflowerblue;">ISTRUZIONE E FORMAZIONE</h3>
+                    <ul>
+                        <li><strong>Master Data Analytics - Boolean tech Academy</strong><br>
+                            <span class="text-muted">(10/2025 - in corso)</span><br>
+                            6 mesi di corso sull’analisi dei dati con SQL, Python, Statistics, Excel, Power BI, Machine Learning
+                        </li>
+                        <li><strong>Master Web Developer - Boolean tech Academy</strong><br>
+                            <span class="text-muted">(11/2024 - 08/2025)</span><br>
+                            320 ore di corso sullo sviluppo di applicazioni web MVC o API.<br>
+                            <a href="https://raw.githubusercontent.com/Bruno0190/CV/refs/heads/main/picture/Certificate%20WEB%20DEVELOPMENT.jpg" target="_blank" class="link-primary">
+                                Visualizza certificato
+                            </a>
+                        </li>
+                        <li><strong>Raccomandatario Marittimo - Camera di commercio di Napoli</strong><br>
+                            <span class="text-muted">(11/2024)</span><br>
+                            Attività di raccomandatario marittimo ai sensi della 
+                            <a href="https://www.gazzettaufficiale.it/eli/id/1977/04/22/077U0135/sg">
+                                LEGGE 4 aprile 1977, n. 135
+                            </a>
+                        </li>
+                        <li><strong>Diploma maturità classica - Liceo Classico</strong><br>
+                            <span class="text-muted">(06/2009)</span>
+                        </li>
+                    </ul>
+                </section>
+
+                <section id="LINGUE" class="mb-3">
+                    <h3 style="font-size: 25px;color:cornflowerblue;">LINGUE</h3>
+                    <ul>
+                        <li><strong>Italiano: </strong>Madrelingua</li>
+                        <li><strong>Inglese: </strong>QECR C1 - CAMBRIDGE English CAE</li>
+                    </ul>
+                </section>
+            </div>
         </form>
-
     </div>
-
-    <script>
-        function addSkill() {
-            const container = document.getElementById('skills-container');
-            const newInput = document.createElement('div');
-            newInput.className = 'mb-2';
-            newInput.innerHTML = '<input type="text" class="form-control" placeholder="Aggiungi una competenza">';
-            container.appendChild(newInput);
-        }
-
-        function addProject() {
-            const container = document.getElementById('projects-container');
-            const newProject = document.createElement('div');
-            newProject.className = 'mb-3';
-            newProject.innerHTML = `
-                <div class="mb-2">
-                    <label class="form-label">Nome Progetto</label>
-                    <input type="text" class="form-control" placeholder="Nome progetto">
-                </div>
-                <div class="mb-2">
-                    <label class="form-label">Descrizione</label>
-                    <textarea class="form-control" rows="2" placeholder="Descrizione progetto"></textarea>
-                </div>
-                <div class="mb-2">
-                    <label class="form-label">URL</label>
-                    <input type="url" class="form-control" placeholder="https://...">
-                </div>
-            `;
-            container.appendChild(newProject);
-        }
-
-        function addEducation() {
-            const container = document.getElementById('educations-container');
-            const newEducation = document.createElement('div');
-            newEducation.className = 'mb-3 p-3 border rounded';
-            newEducation.innerHTML = `
-                <div class="mb-3">
-                    <label class="form-label">Titolo</label>
-                    <input type="text" class="form-control" placeholder="Titolo corso/diploma">
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="form-label">Mese Inizio</label>
-                        <input type="number" class="form-control" min="1" max="12" placeholder="01">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Anno Inizio</label>
-                        <input type="number" class="form-control" placeholder="2020">
-                    </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-md-6">
-                        <label class="form-label">Mese Fine</label>
-                        <input type="number" class="form-control" min="1" max="12" placeholder="12">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Anno Fine</label>
-                        <input type="number" class="form-control" placeholder="2025">
-                    </div>
-                </div>
-                <div class="form-check mt-2">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">In corso</label>
-                </div>
-                <div class="mt-3">
-                    <label class="form-label">Descrizione</label>
-                    <textarea class="form-control" rows="2" placeholder="Descrizione..."></textarea>
-                </div>
-                <div class="mt-3">
-                    <label class="form-label">Link Certificato</label>
-                    <input type="url" class="form-control" placeholder="https://...">
-                </div>
-            `;
-            container.appendChild(newEducation);
-        }
-
-        function addLanguage() {
-            const container = document.getElementById('languages-container');
-            const newLanguage = document.createElement('div');
-            newLanguage.className = 'mb-3';
-            newLanguage.innerHTML = `
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="form-label">Lingua</label>
-                        <input type="text" class="form-control" placeholder="Italiano">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Livello</label>
-                        <input type="text" class="form-control" placeholder="Madrelingua">
-                    </div>
-                </div>
-            `;
-            container.appendChild(newLanguage);
-        }
-    </script>
     
+    <footer id="cv_footer" class="d-flex justify-content-between m-3">
+        <div class="bottone_scarica_pdf">
+            <button onclick="window.location.href='/genera-pdf'">
+                Scarica PDF
+            </button>
+        </div>
+        <p id="trattamento_dati" class="text-end" style="font-size: 12px;">
+            Autorizzo il trattamento dei miei dati personali presenti<br> nel CV ai sensi dell’art. 13 d. lgs. 30 giugno 2003 n. 196-<br> “Codice in materia di protezione dei dati personali”<br> e dell’art. 13 GDPR 679/16 -
+        </p>
+    </footer>
 </body>
 </html>
