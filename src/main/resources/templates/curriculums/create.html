@@ -25,32 +25,28 @@
                 </section>
                 <!-- SEZIONE CONTATTI -->          
                 <section id="CONTATTI" class="py-0 px-3 mx-5 my-3">
-                    <label for="contact_email"></label>
-                    <label for="contact_phone"></label>
-                    <label for="contact_linkedin"></label>
-                    <label for="contact_github"></label>
-                    <label for="contact_portfolio"></label>
-
-
-
                     <h4 style="font-size: 25px">CONTATTI</h4>
-                    <a href="mailto:bruno.varadero90@gmail.com">bruno.varadero90@gmail.com</a><br>
-                    <a href="tel:+39330949857">+(39) 330 949 857</a><br>
-                    <a href="https://www.linkedin.com/in/bruno-padula-b35732257/" target="_blank">LinkedIn</a>
-                    <span> | </span>
-                    <a href="https://github.com/Bruno0190" target="_blank">GitHub</a>
+                    <label for="contact_email"></label>
+                    <input th:field="*{contact_email}" class="form-control" type="text" id="contact_email" placeholder="Email"><br>
+                    <label for="contact_phone"></label>
+                    <input th:field="*{contact_phone}" class="form-control" type="text" id="contact_phone" placeholder="Phone"><br>
+                    <label for="contact_linkedin"></label>
+                    <input th:field="*{contact_linkedin}" class="form-control" type="text" id="contact_linkedin" placeholder="LinkedIn"><br>
+                    <label for="contact_github"></label>
+                    <input th:field="*{contact_github}" class="form-control" type="text" id="contact_github" placeholder="GitHub"><br>
+                    <label for="contact_portfolio"></label>
+                    <input th:field="*{contact_portfolio}" class="form-control" type="text" id="contact_portfolio" placeholder="Portfolio"><br>
                 </section>
 
                 <section id="COMPETENZE_TECNICHE" class="py-0 px-3 mx-5 my-3">
                     <h4 style="font-size: 25px">COMPETENZE TECNICHE</h4>
-                    <ul>
-                        <li>HTML</li>
-                        <li>CSS</li>
-                        <li>JavaScript</li>
-                        <li>Java</li>
-                        <li>MySQL</li>
-                        <li>Spring/Spring Boot</li>
-                    </ul>
+                    <div id="skills-container">
+                        <div th:each="skill, iterStat : ${curriculum.skills}">
+                            <input th:field="*{skills[__${iterStat.index}__].skill_name}" class="form-control" type="text" placeholder="Skill">
+                            <button type="button" class="btn btn-sm btn-danger mt-1" onclick="removeSkill(this)">Rimuovi</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-primary mt-2" onclick="addSkill()">Aggiungi Skill</button>
                 </section>
 
                 <section id="PROGETTI" class="py-0 px-3 mx-5 my-3">
