@@ -37,29 +37,34 @@
                     <label for="contact_portfolio"></label>
                     <input th:field="*{contact_portfolio}" class="form-control" type="text" id="contact_portfolio" placeholder="Portfolio"><br>
                 </section>
-
+                <!-- SEZIONE COMPETENZE TECNICHE -->
                 <section id="COMPETENZE_TECNICHE" class="py-0 px-3 mx-5 my-3">
                     <h4 style="font-size: 25px">COMPETENZE TECNICHE</h4>
-                    <div id="skills-container">
-                        <div th:each="skill, iterStat : ${curriculum.skills}">
+                    <div id="skills_container">
+                        <div class="div_skill" th:each="skill, iterStat : ${curriculum.skills}">
                             <input th:field="*{skills[__${iterStat.index}__].skill_name}" class="form-control" type="text" placeholder="Skill">
                             <button type="button" class="btn btn-sm btn-danger mt-1" onclick="removeSkill(this)">Rimuovi</button>
                         </div>
                     </div>
                     <button type="button" class="btn btn-sm btn-primary mt-2" onclick="addSkill()">Aggiungi Skill</button>
                 </section>
-
+                <!-- SEZIONE PROGETTI -->
                 <section id="PROGETTI" class="py-0 px-3 mx-5 my-3">
                     <h4 style="font-size: 25px">PROGETTI</h4>
-                    <ul>
-                        <li><strong>Ticket platform - Boolean tech academy:</strong><br>
-                            Backoﬃce per la piattaforma di richieste supporto per assistenza tecnica di un prodotto.
-                        </li>
-                        <li><strong>Agency Form – Luise Associates Srl:</strong><br>
-                            Ecosistema digitale completamente integrato, dove Google Forms, Outlook, PDF Forms e Excel sono stati collegati tramite JavaScript e macro VBA in un unico workflow automatizzato per raccolta dati, gestione documentale e generazione delle pratiche marittime.
-                        </li>
-                    </ul>
+                    <div id="projects_container">
+                        <div class="div_project" th:each="project, iterStat : ${curriculum.projects}">
+                            <input th:field="*{projects[__${iterStat.index}__].projectName}" class="form-control" type="text" placeholder="Project Name">
+                            <textarea th:field="*{projects[__${iterStat.index}__].description}" class="form-control mt-2" placeholder="Project Description"></textarea>
+                            <input th:field="*{projects[__${iterStat.index}__].url}" class="form-control mt-2" type="text" placeholder="Project Link">
+                            <button type="button" class="btn btn-sm btn-danger mt-1" onclick="removeProject(this)">Rimuovi</button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-primary mt-2" onclick="addProject()">Aggiungi Progetto</button>
+                    </div>
                 </section>
+
+
+
+
         
             </div>
 

@@ -1,6 +1,6 @@
 function updateSkillIndexes() {
 
-    const skillDivs = document.querySelectorAll('#skills-container .div_skill');
+    const skillDivs = document.querySelectorAll('#skills_container .div_skill');
 
     for (let i = 0; i < skillDivs.length; i++) {
 
