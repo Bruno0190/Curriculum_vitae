@@ -32,17 +32,22 @@ function addEducation() {
         <label class="mt-2">Descrizione titolo di studi</label>
         <textarea class="form-control" name="educations[${i}].description"></textarea>
 
-        <label class="mt-2">Upload certificate</label>
-        <input class="form-control" type="text" name="educations[${i}].imageCertificateUrl">
+        <label for="certificate_image_area" class="mt-2">Upload certificate</label>
+        <input class="form-control certificate_image_input" type="file" name="educations[${i}].certificate_files" accept="image/*,application/pdf">
+        <input type="text" class="certificate_url_input mt-2" name="educations[${i}].imageCertificateUrl">
 
         <label class="mt-2">Enter link</label>
         <input class="form-control" type="text" name="educations[${i}].link">
 
-        <button type="button" class="btn btn-sm btn-danger mt-3"
-                onclick="removeEducation(this)">Rimuovi ISTRUZIONE</button>
+        <button type="button" class="btn btn-sm btn-danger mt-3" onclick="removeEducation(this)">Rimuovi ISTRUZIONE</button>
     `;
 
     container.appendChild(newDiv);
+
+    // AGGIUNGI EVENTI DRAG&DROP AL NUOVO INPUT FILE
+    const newFileInput = newDiv.querySelector('.certificate_image_input');
+    newFileInput.addEventListener("dragover", event => event.preventDefault());
+    newFileInput.addEventListener("drop", event => dragAndDropFile(event, newFileInput));
 
     updateEducationIndexes();
 }

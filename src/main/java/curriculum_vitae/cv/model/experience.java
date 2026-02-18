@@ -4,8 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import java.util.ArrayList;
@@ -19,9 +19,10 @@ import jakarta.persistence.Column;
 public class Experience {
 
     /* Relazioni */
-    @OneToOne(mappedBy = "experience")
+    @ManyToOne
+    @JoinColumn(name = "curriculum_id")
     private Curriculum curriculum;
-
+    
     @OneToMany(mappedBy = "experience", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Job> jobs = new ArrayList<>();
 

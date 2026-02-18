@@ -7,8 +7,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import java.util.List;
-import java.util.ArrayList;
 import jakarta.persistence.JoinColumn;
 
 @Entity
