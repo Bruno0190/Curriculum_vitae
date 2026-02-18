@@ -1,6 +1,5 @@
 function toggleEndDateJobFields(checkbox) {
     const jobDiv = checkbox.closest('.div_job');
-
     const endMonth = jobDiv.querySelector('.end-month');
     const endYear = jobDiv.querySelector('.end-year');
     if (checkbox.checked) {
