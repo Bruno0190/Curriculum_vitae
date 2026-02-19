@@ -3,16 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Curriculum Vitae</title>
+    <title>Create Curriculum Vitae</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
  
-    <script src="script.js"></script>
+    <script src="/js/Skill/addSkill.js"></script>
+    <script src="/js/Skill/removeSkill.js"></script>
+    <script src="/js/Skill/updateSkillIndexes.js"></script>
+
+    <script src="/js/Project/addProject.js"></script>
+    <script src="/js/Project/removeProject.js"></script>
+    <script src="/js/Project/updateProjectIndexes.js"></script>
+
+    <script src="/js/Experience/addExperience.js"></script>
+    <script src="/js/Experience/removeExperience.js"></script>
+    <script src="/js/Experience/updateExperienceIndexes.js"></script>
+    <script src="/js/Experience/toggleEndDateExperienceFields"></script>
+
+    <script src="/js/Education/addEducation.js"></script>
+    <script src="/js/Education/removeEducation.js"></script>
+    <script src="/js/Education/updateEducationIndexes.js"></script>
+    <script src="/js/Education/toggleEndDateEducationFields.js"></script>
+
+    <script src="/js/Job/addJob.js"></script>
+    <script src="/js/Job/removeJob.js"></script>
+    <script src="/js/Job/updateJobIndexes.js"></script>
+    <script src="/js/Job/toggleEndDateJobFields.js"></script>
+
+    <script src="/js/Task/addTask.js"></script>
+    <script src="/js/Task/removeTask.js"></script>
+    <script src="/js/Task/updateTaskIndexes.js"></script>
+
+    <script src="/js/Language/addLanguage.js"></script>
+    <script src="/js/Language/removeLanguage.js"></script>
+    <script src="/js/Language/updateLanguageIndexes.js"></script>
+
+    <script src="/js/dragAndDrop.js"></script>
 
     <link rel="stylesheet" href="/css/print_style.css">
 
 </head>
 <body class="print-tight">
+    <div th:replace="fragments/navbar"></div>
+    <header>Create your own Curriculum Vitae</header>
     
     <div id="container_cv" class="container">
         <form th:action ="@{/curriculums/create}" id="row_cv" class="row" method="post" th:object="${curriculum}" enctype="multipart/form-data">
@@ -20,12 +53,13 @@
             <div class="col-12 col-lg-4 left-col">
                 <!-- SEZIONE FOTO -->
                 <section id="FOTO">
-                    <label for="image_profile_Url" class="form-label">Add Profile Picture</label>
-                    <input th:field="*{image_profile_Url}" class="form-control img-fluid py-0 px-3 rounded-5 mx-5 my-3" style="max-width:350px;" type="file" id="image_profile_Url" accept="image/*">
+                    <label for="profile_image_area" class="form-label">Add Profile Picture</label>
+                    <input class="form-control img-fluid py-0 px-3 rounded-5 mx-5 my-3" style="max-width:350px;" type="file" id="profile_image_area" name="profiles_file" accept="image/*">
+                    <input type="hidden" id="profileImageUrl" th:field="*{image_profile_Url}">
                 </section>
                 <!-- SEZIONE CONTATTI -->          
                 <section id="CONTATTI" class="py-0 px-3 mx-5 my-3">
-                    <h4 style="font-size: 25px">CONTATTI</h4>
+                    <h4 style="font-size: 25px">CONTACTS</h4>
                     <label for="contact_email"></label>
                     <input th:field="*{contact_email}" class="form-control" type="text" id="contact_email" placeholder="Email"><br>
                     <label for="contact_phone"></label>
@@ -39,171 +73,284 @@
                 </section>
                 <!-- SEZIONE COMPETENZE TECNICHE -->
                 <section id="COMPETENZE_TECNICHE" class="py-0 px-3 mx-5 my-3">
-                    <h4 style="font-size: 25px">COMPETENZE TECNICHE</h4>
+                    <h4 style="font-size: 25px">HARD SKILL</h4>
                     <div id="skills_container">
                         <div class="div_skill" th:each="skill, iterStat : ${curriculum.skills}">
-                            <input th:field="*{skills[__${iterStat.index}__].skill_name}" class="form-control" type="text" placeholder="Skill">
+                            <input th:field="*{skills[__${iterStat.index}__].skill_name}" class="form-control" type="text" th:id="'skill_name_' + ${iterStat.index}" placeholder="Skill">
                             <button type="button" class="btn btn-sm btn-danger mt-1" onclick="removeSkill(this)">Rimuovi</button>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-sm btn-primary mt-2" onclick="addSkill()">Aggiungi Skill</button>
+                    <button type="button" class="btn btn-sm btn-primary mt-2" onclick="addSkill()">Add Skill</button>
                 </section>
                 <!-- SEZIONE PROGETTI -->
                 <section id="PROGETTI" class="py-0 px-3 mx-5 my-3">
-                    <h4 style="font-size: 25px">PROGETTI</h4>
+                    <h4 style="font-size: 25px">PROJECTS</h4>
                     <div id="projects_container">
-                        <div class="div_project" th:each="project, iterStat : ${curriculum.projects}">
-                            <input th:field="*{projects[__${iterStat.index}__].projectName}" class="form-control" type="text" placeholder="Project Name">
-                            <textarea th:field="*{projects[__${iterStat.index}__].description}" class="form-control mt-2" placeholder="Project Description"></textarea>
-                            <input th:field="*{projects[__${iterStat.index}__].url}" class="form-control mt-2" type="text" placeholder="Project Link">
-                            <button type="button" class="btn btn-sm btn-danger mt-1" onclick="removeProject(this)">Rimuovi</button>
+                        <div class="div_project" th:each="project, projStat : ${curriculum.projects}">
+                            <input th:field="*{projects[__${projStat.index}__].projectName}" class="form-control" type="text" th:id="'project_name_' + ${projStat.index}" placeholder="Project Name">
+                            <textarea th:field="*{projects[__${projStat.index}__].description}" class="form-control mt-2" th:id="'project_description_' + ${projStat.index}" placeholder="Project Description"></textarea>
+                            <input th:field="*{projects[__${projStat.index}__].url}" class="form-control mt-2" type="text" th:id="'project_url_' + ${projStat.index}" placeholder="Project Link">
+                            <button type="button" class="btn btn-sm btn-danger mt-1" onclick="removeProject(this)">Remove</button>
                         </div>
-                        <button type="button" class="btn btn-sm btn-primary mt-2" onclick="addProject()">Aggiungi Progetto</button>
+                        <button type="button"
+                                class="btn btn-sm btn-primary mt-2"
+                                onclick="addProject()">
+                            Add Project
+                        </button>
+
                     </div>
                 </section>
-
-
-
-
-        
             </div>
 
             <div class="col-12 col-lg-8 right-col">
 
                 <section id="NOME_TITOLO" class="mb-3">
-                    <h2 style="font-size: 45px;">Bruno Padula</h2>
-                    <h3 style="font-size: 30px; margin-bottom: 30px;">Technical Project Manager - Back-end Developer</h3>
+                    <h3 th:text="*{user.name}" style="font-size: 45px;"></h3><br>
+                    <h4 style="font-size: 25px">PROFESSIONAL TITLE</h4>
+                    <label for="profile_role"></label>
+                    <input th:field="*{profile_role}" class="form-control" type="text" id="profile_role" placeholder="Professional title"><br>
                 </section>
-                
 
                 <section id="PROFILO" class="mb-3">
-                    <h3 style="font-size: 25px;color:cornflowerblue;">PROFILO</h3>
-                    <p style="margin-bottom: 20px;">
-                        Dieci anni di esperienza nella gestione operativa e amministrativa nel settore raccomandatario marittimo, con specializzazione recente in sviluppo web. Ho fondato e coordinato un dipartimento operativo, conseguendo risultati concreti (fatturato di ~820.000€ e 2.400+ pratiche gestite). Attualmente approfondisco Data Analytics e Power BI per integrare analisi avanzata nei progetti di trasformazione digitale.
-                    </p>
+                    <h3 style="font-size: 25px;color:cornflowerblue;">PROFILE</h3>
+                    <label for="profile_description"></label>
+                    <textarea th:field="*{profile_description}" class="form-control" id="profile_description" placeholder="Profile description" style="margin-bottom: 20px;"></textarea>
                 </section>
-
+                <!-- SEZIONE ESPERIENZA -->
                 <section id="ESPERIENZA" class="mb-3">
-                    <h3 style="font-size: 25px;color:cornflowerblue;">ESPERIENZA</h3>
-                    <h4 style="font-size: 20px">
-                        <strong>Luise Associates Srl, Napoli<br>(02/2016 - 10/2025)</strong>
-                    </h4>
-                    <h4 style="font-size: 16px; font-weight:400;">
-                        <em>Agenzia marittima leader in assistenza yachting e servizi amministrativi per grandi navi da diporto private e commerciali
-                        </em>
-                    </h4>
-                    <h5 style="font-size: 16px">
-                        <u>Responsabile amministrativo</u><br>
-                        <span class="text-muted">(01/2025 - 10/2025)</span>
-                    </h5>
-                    <ul>
-                        <li><strong>Governance & Compliance: </strong>
-                            delega con procura institoria per la gestione e firma di atti amministrativi
-                        </li>
-                        <li><strong>Project Management Tools & Methodologies: </strong>
-                            supervisione completa del dipartimento Formalities (4 risorse)
-                        </li>
-                        <li><strong>Digital Transformation & System Integration: </strong>
-                            consolidamento del sistema digitale e sviluppo di una versione avanzata
-                        </li>
-                        <li><strong>KPI Monitoring: </strong>
-                            2.400+ comunicazioni, 200+ imbarchi, 260 sbarchi, 600+ pratiche ambientali, fatturato ~820.000€
-                        </li>
-                    </ul>
-                    <h5 style="font-size: 16px">
-                        <u>Responsabile operativo</u><br>
-                        <span class="text-muted">(07/2021-12/2024)</span>
-                    </h5>
-                    <ul>
-                        <li><strong>Process Automation: </strong>
-                            creazione del nuovo dipartimento Formalities, struttura e standard operativi
-                        </li>
-                        <li><strong>Project Management Tools & Methodologies: </strong>
-                            selezione, formazione e affiancamento del personale
-                        </li>
-                        <li><strong>Digital Transformation & System Integration: </strong>
-                            avvio della creazione di un sistema digitale interno (2023–2024)
-                        </li>
-                        <li><strong>KPI Monitoring: </strong>
-                            1.300+ comunicazioni, 80 imbarchi/sbarchi, fatturato ~762.560€
-                        </li>
-                    </ul>
-                    <h5 style="font-size: 16px">
-                        <u>Agente di Sicurezza impianto portuale deputa</u><br>
-                        <span class="text-muted">(11/2016 – 01/2025)</span>
-                    </h5>
-                    <ul>
-                        <li><strong>Compliance & Risk Management: </strong>
-                            revisione e custodia del Port Facility Security Plan
-                        </li>
-                        <li><strong>Project Management Tools & Methodologies: </strong>
-                            coordinamento personale sicurezza, pianificazione ed esecuzione di esercitazioni e addestramento
-                        </li>
-                        <li><strong>Governance & Audit: </strong>
-                            gestione ispezioni annuali con Capitaneria
-                        </li>
-                    </ul>
-                    <h5 style="font-size: 16px">
-                        <u>Impiegato addetto al disbrigo pratiche</u><br>
-                        <span class="text-muted">(02/2016 – 06/2021)</span>
-                    </h5>
-                    <ul>
-                        <li><strong>Operational Support: </strong>
-                            pratiche Capitaneria, Dogana, Sanità per navi in arrivo/partenza, pratiche di frontiera (cambio equipaggi stranieri, rilascio visti Schengen)
-                        </li>
-                        <li><strong>Document Management and Compliance: </strong>
-                            coordinamento operativo con autorità e terminal; controllo documentale IMO/ISPS/SOLAS
-                        </li>
-                        <li><strong>KPI Monitoring: </strong>
-                            comunicazioni 60→300+, imbarchi/sbarchi 20→50, pratiche ambientali 5→100
-                        </li>
-                    </ul>
+                    <h3 style="font-size: 25px;color:cornflowerblue;">EXPERIENCE</h3>
+
+                    <div id="experiences_container">
+
+                        <div class="div_experience"
+                            th:each="experience, expStat : ${curriculum.experiences}"
+                            th:id="'experience_' + ${expStat.index}">
+
+                            <!-- EXPERIENCE FIELDS -->
+                            <label th:for="'companyName_' + ${expStat.index}">Company Name</label>
+                            <input th:field="*{experiences[__${expStat.index}__].companyName}"
+                                class="form-control"
+                                type="text"
+                                th:id="'companyName_' + ${expStat.index}">
+
+                            <label class="mt-2" th:for="'exp_startMonth_' + ${expStat.index}">Start Month</label>
+                            <input th:field="*{experiences[__${expStat.index}__].startMonth}"
+                                class="form-control"
+                                type="number"
+                                th:id="'exp_startMonth_' + ${expStat.index}">
+
+                            <label class="mt-2" th:for="'exp_startYear_' + ${expStat.index}">Start Year</label>
+                            <input th:field="*{experiences[__${expStat.index}__].startYear}"
+                                class="form-control"
+                                type="number"
+                                th:id="'exp_startYear_' + ${expStat.index}">
+
+                            <label class="mt-2" th:for="'exp_endMonth_' + ${expStat.index}">End Month</label>
+                            <input th:field="*{experiences[__${expStat.index}__].endMonth}"
+                                class="form-control end-month"
+                                type="number"
+                                th:id="'exp_endMonth_' + ${expStat.index}">
+
+                            <label class="mt-2" th:for="'exp_endYear_' + ${expStat.index}">End Year</label>
+                            <input th:field="*{experiences[__${expStat.index}__].endYear}"
+                                class="form-control end-year"
+                                type="number"
+                                th:id="'exp_endYear_' + ${expStat.index}">
+
+                            <div class="form-check mt-2">
+                                <input th:field="*{experiences[__${expStat.index}__].inProgress}"
+                                    class="form-check-input in-progress-checkbox"
+                                    type="checkbox"
+                                    th:id="'exp_inProgress_' + ${expStat.index}"
+                                    onchange="toggleEndDateExperienceFields(this)">
+                                <label class="form-check-label"
+                                    th:for="'exp_inProgress_' + ${expStat.index}">
+                                    In progress
+                                </label>
+                            </div>
+
+                            <label class="mt-2" th:for="'companyDesc_' + ${expStat.index}">Company Description</label>
+                            <textarea th:field="*{experiences[__${expStat.index}__].company_description}"
+                                    class="form-control"
+                                    th:id="'companyDesc_' + ${expStat.index}"></textarea>
+                            <!-- JOB SECTION -->
+                            <section id="LAVORO" class="mt-3">
+                                <h4 style="font-size: 20px">ROLES</h4>
+
+                                <div class="jobs_container">
+
+                                    <div class="div_job"
+                                        th:each="job, jobStat : ${experience.jobs}"
+                                        th:id="'experience_' + ${expStat.index} + '_job_' + ${jobStat.index}">
+
+                                        <label th:for="'jobTitle_' + ${expStat.index} + '_' + ${jobStat.index}">Role</label>
+                                        <input th:field="*{experiences[__${expStat.index}__].jobs[__${jobStat.index}__].jobTitle}"
+                                            class="form-control"
+                                            type="text"
+                                            th:id="'jobTitle_' + ${expStat.index} + '_' + ${jobStat.index}">
+
+                                        <label class="mt-2">Start Month</label>
+                                        <input th:field="*{experiences[__${expStat.index}__].jobs[__${jobStat.index}__].startMonth}"
+                                            class="form-control" type="number">
+
+                                        <label class="mt-2">Start Year</label>
+                                        <input th:field="*{experiences[__${expStat.index}__].jobs[__${jobStat.index}__].startYear}"
+                                            class="form-control" type="number">
+
+                                        <label class="mt-2">End Month</label>
+                                        <input th:field="*{experiences[__${expStat.index}__].jobs[__${jobStat.index}__].endMonth}"
+                                            class="form-control end-month" type="number">
+
+                                        <label class="mt-2">End Year</label>
+                                        <input th:field="*{experiences[__${expStat.index}__].jobs[__${jobStat.index}__].endYear}"
+                                            class="form-control end-year" type="number">
+
+                                        <div class="form-check mt-2">
+                                            <input th:field="*{experiences[__${expStat.index}__].jobs[__${jobStat.index}__].inProgress}"
+                                                class="form-check-input in-progress-checkbox"
+                                                type="checkbox"
+                                                onchange="toggleEndDateJobFields(this)">
+                                            <label class="form-check-label">In progress</label>
+                                        </div>
+
+                                        <!-- TASK SECTION -->
+                                        <section class="mt-3">
+                                            <h4>TASKS</h4>
+
+                                            <div class="tasks_container">
+
+                                                <div class="div_task"
+                                                    th:each="task, taskStat : ${job.jobTask}"
+                                                    th:id="'exp_' + ${expStat.index} + '_job_' + ${jobStat.index} + '_task_' + ${taskStat.index}">
+
+                                                    <label th:for="'task_' + ${expStat.index} + '_' + ${jobStat.index} + '_' + ${taskStat.index}">Task</label>
+                                                    <input th:field="*{experiences[__${expStat.index}__].jobs[__${jobStat.index}__].jobTask[__${taskStat.index}__].task}"
+                                                        class="form-control"
+                                                        type="text"
+                                                        th:id="'task_' + ${expStat.index} + '_' + ${jobStat.index} + '_' + ${taskStat.index}">
+
+                                                    <label class="mt-2"
+                                                        th:for="'task_description_' + ${expStat.index} + '_' + ${jobStat.index} + '_' + ${taskStat.index}">
+                                                        Task description
+                                                    </label>
+
+                                                    <input th:field="*{experiences[__${expStat.index}__].jobs[__${jobStat.index}__].jobTask[__${taskStat.index}__].task_description}"
+                                                        class="form-control"
+                                                        type="text"
+                                                        th:id="'task_description_' + ${expStat.index} + '_' + ${jobStat.index} + '_' + ${taskStat.index}">
+
+                                                    <button type="button" class="btn btn-sm btn-danger mt-1"
+                                                            onclick="removeTask(this)">Remove</button>
+                                                </div>
+
+                                                <button type="button" class="btn btn-sm btn-primary mt-2"
+                                                        onclick="addTask(this)">Add Task</button>
+                                            </div>
+                                        </section>
+
+                                        <button type="button" class="btn btn-sm btn-danger mt-1"
+                                                onclick="removeJob(this)">Remove ROLE</button>
+                                    </div>
+                                </div>
+
+                                <button type="button" class="btn btn-sm btn-primary mt-2"
+                                        onclick="addJob(this)">Add ROLE</button>
+                            </section>
+
+                            <button type="button" class="btn btn-sm btn-danger mt-3"
+                                    onclick="removeExperience(this)">Remove EXPERIENCE</button>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-sm btn-primary mt-3"
+                            onclick="addExperience()">Add Experience</button>
                 </section>
 
-                <section id="ISTRUZIONE" class="mb-3">
-                    <h3 style="font-size: 25px;color:cornflowerblue;">ISTRUZIONE E FORMAZIONE</h3>
-                    <ul>
-                        <li><strong>Master Data Analytics - Boolean tech Academy</strong><br>
-                            <span class="text-muted">(10/2025 - in corso)</span><br>
-                            6 mesi di corso sull’analisi dei dati con SQL, Python, Statistics, Excel, Power BI, Machine Learning
-                        </li>
-                        <li><strong>Master Web Developer - Boolean tech Academy</strong><br>
-                            <span class="text-muted">(11/2024 - 08/2025)</span><br>
-                            320 ore di corso sullo sviluppo di applicazioni web MVC o API.<br>
-                            <a href="https://raw.githubusercontent.com/Bruno0190/CV/refs/heads/main/picture/Certificate%20WEB%20DEVELOPMENT.jpg" target="_blank" class="link-primary">
-                                Visualizza certificato
-                            </a>
-                        </li>
-                        <li><strong>Raccomandatario Marittimo - Camera di commercio di Napoli</strong><br>
-                            <span class="text-muted">(11/2024)</span><br>
-                            Attività di raccomandatario marittimo ai sensi della 
-                            <a href="https://www.gazzettaufficiale.it/eli/id/1977/04/22/077U0135/sg">
-                                LEGGE 4 aprile 1977, n. 135
-                            </a>
-                        </li>
-                        <li><strong>Diploma maturità classica - Liceo Classico</strong><br>
-                            <span class="text-muted">(06/2009)</span>
-                        </li>
-                    </ul>
-                </section>
 
-                <section id="LINGUE" class="mb-3">
-                    <h3 style="font-size: 25px;color:cornflowerblue;">LINGUE</h3>
-                    <ul>
-                        <li><strong>Italiano: </strong>Madrelingua</li>
-                        <li><strong>Inglese: </strong>QECR C1 - CAMBRIDGE English CAE</li>
-                    </ul>
-                </section>
+                <!-- SEZIONE ISTRUZIONE -->
+                 <section id="ISTRUZIONE" class="mb-3">
+                    <h3 style="font-size: 25px;color:cornflowerblue;">EDUCATION AND TRAINING</h3>
+                    <div id="educations_container">
+                        <div class="div_education" th:each="education, educationStat : ${curriculum.educations}">
+                            <label for="title">Title</label>
+                            <input th:field="*{educations[__${educationStat.index}__].title}" class="form-control" type="text" placeholder="Laurea in medicina - Università degli Studi di Roma" id="'title'+${educationStat.index}">
+
+                            <label for="startMonth" class="mt-2">Start Month</label>
+                            <input th:field="*{educations[__${educationStat.index}__].startMonth}"
+                                class="form-control" type="number" id="'startMonth'+${educationStat.index}">
+
+                            <label for="startYear" class="mt-2">Start Year</label>
+                            <input th:field="*{educations[__${educationStat.index}__].startYear}"
+                                class="form-control" type="number" id="'startYear'+${educationStat.index}">
+
+                            <label for="endMonth" class="mt-2">End Month</label>
+                            <input th:field="*{educations[__${educationStat.index}__].endMonth}"
+                                class="form-control end-month" type="number" id="'endMonth'+${educationStat.index}">
+
+                            <label for="endYear" class="mt-2">End Year</label>
+                            <input th:field="*{educations[__${educationStat.index}__].endYear}"
+                                class="form-control end-year" type="number" id="'endYear'+${educationStat.index}">
+
+                            <div class="form-check mt-2">
+                                <input th:field="*{educations[__${educationStat.index}__].inProgress}"
+                                    class="form-check-input in-progress-checkbox"
+                                    type="checkbox"
+                                    onchange="toggleEndDateEducationFields(this)">
+                                <label class="form-check-label">In progress</label>
+                            </div>
+            
+                            <label for="description">Description of the educational title</label>
+                            <textarea th:field="*{educations[__${educationStat.index}__].description}" class="form-control" id="'description'+${educationStat.index}" rows="3"></textarea>
+
+                            <label for="certificate_image_area" class="mt-2">Upload certificate</label>
+                            <input class="form-control certificate_image_input" type="file" name="certificates_files" accept="image/*,application/pdf" id="'certificate_image_area'+${educationStat.index}">
+                            <input type="hidden" class="certificate_url_input" th:field="*{educations[__${educationStat.index}__].imageCertificateUrl}">
+
+                            <label for="link">Enter link</label>
+                            <input th:field="*{educations[__${educationStat.index}__].link}" class="form-control mt-2" type="text" id="'link'+${educationStat.index}" placeholder="https://www.universita.it/laurea-in-medicina">
+
+                            <button type="button" class="btn btn-sm btn-danger mt-3"
+                            onclick="removeEducation(this)">Remove EDUCATION</button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-primary mt-2"
+                        onclick="addEducation()">Add EDUCATION</button>
+                    </div>
+                 </section>
+
+                 <!-- SEZIONE LINGUE -->
+                  <section id="LINGUE" class="mb-3">
+                    <h3 style="font-size: 25px;color:cornflowerblue;">LANGUAGES</h3>
+                    <div class="language_container">
+                        <div class="div_language" th:each="language, languageStat : ${curriculum.languages}">
+                            <label for="language_name">Language</label>
+                            <input th:field="*{languages[__${languageStat.index}__].language_name}" class="form-control" type="text" id="'language_name'+${languageStat.index}" placeholder="English">
+                            <label for="proficiency_level" class="mt-2">Proficiency Level</label>
+                            <select th:field="*{languages[__${languageStat.index}__].proficiency_level}" class="form-control" type="text" id="'proficiency_level'+${languageStat.index}">
+                                <option value="">Select proficiency level</option>
+                                <option value="A1">A1</option>
+                                <option value="A2">A2</option>
+                                <option value="B1">B1</option>
+                                <option value="B2">B2</option>
+                                <option value="C1">C1</option>
+                                <option value="C2">C2</option>
+                            </select>
+                
+                            <label for="school_String" class="mt-2">School</label>
+                            <input th:field="*{languages[__${languageStat.index}__].school_String}" class="form-control" type="text" id="'school_String'+${languageStat.index}" placeholder="CAMBRIDGE English CAE">
+
+                            <button type="button" class="btn btn-sm btn-danger mt-2"
+                                    onclick="removeLanguage(this)">Remove LANGUAGE</button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-primary mt-2"
+                        onclick="addLanguage()">Add LANGUAGE</button>
+                    </div>
+                  </section>
             </div>
         </form>
     </div>
     
     <footer id="cv_footer" class="d-flex justify-content-between m-3">
-        <div class="bottone_scarica_pdf">
-            <button onclick="window.location.href='/genera-pdf'">
-                Scarica PDF
-            </button>
-        </div>
+        <button type="submit" form="row_cv" class="btn btn-success">Save CV</button>
         <p id="trattamento_dati" class="text-end" style="font-size: 12px;">
             Autorizzo il trattamento dei miei dati personali presenti<br> nel CV ai sensi dell’art. 13 d. lgs. 30 giugno 2003 n. 196-<br> “Codice in materia di protezione dei dati personali”<br> e dell’art. 13 GDPR 679/16 -
         </p>

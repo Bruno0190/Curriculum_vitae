@@ -59,10 +59,14 @@
 
                         <img th:if="${#strings.isEmpty(image_profile_Url)}"
                             src="/images/Anonymous.jpeg"
+                            class="img-fluid py-0 px-3 rounded-5 mx-5 my-3" 
+                            style="max-width:350px;"
                             alt="Profile Picture">
 
                         <img th:unless="${#strings.isEmpty(image_profile_Url)}"
                             th:src="*{image_profile_Url}"
+                            class="img-fluid py-0 px-3 rounded-5 mx-5 my-3" 
+                            style="max-width:350px;"
                             alt="Profile Picture">
 
                         <input class="form-control img-fluid py-0 px-3 rounded-5 mx-5 my-3"
@@ -302,26 +306,27 @@
                     
                   <section id="LINGUE" class="mb-3">
                     <h3 style="font-size: 25px;color:cornflowerblue;">LANGUAGES</h3>
-                    <div class="language_container">
-                        <div class="div_language" th:each="language, languageStat : ${curriculum.languages}">
-                            <label for="language_name">Language</label>
-                            <input th:field="*{languages[__${languageStat.index}__].language_name}" class="form-control" type="text" id="'language_name'+${languageStat.index}" placeholder="English">
-                            <label for="proficiency_level" class="mt-2">Proficiency Level</label>
-                            <select th:field="*{languages[__${languageStat.index}__].proficiency_level}" class="form-control" type="text" id="'proficiency_level'+${languageStat.index}">
-                                <option value="">Select proficiency level</option>
-                                <option value="A1">A1</option>
-                                <option value="A2">A2</option>
-                                <option value="B1">B1</option>
-                                <option value="B2">B2</option>
-                                <option value="C1">C1</option>
-                                <option value="C2">C2</option>
-                            </select>
-                            <label for="school_String" class="mt-2">School</label>
-                            <input th:field="*{languages[__${languageStat.index}__].school}" class="form-control" type="text" id="'school_String'+${languageStat.index}" placeholder="CAMBRIDGE English CAE">
-                            <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removeLanguage(this)">Remove LANGUAGE</button>
+                        <div class="language_container">
+                            <div class="div_language" th:each="language, languageStat : ${curriculum.languages}">
+                                <label for="language_name">Language</label>
+                                <input th:field="*{languages[__${languageStat.index}__].language_name}" class="form-control" type="text" id="'language_name'+${languageStat.index}" placeholder="English">
+                                <label for="proficiency_level" class="mt-2">Proficiency Level</label>
+                                <select th:field="*{languages[__${languageStat.index}__].proficiency_level}" class="form-control" type="text" id="'proficiency_level'+${languageStat.index}">
+                                    <option value="">Select level</option>
+                                    <option value="A1">A1</option>
+                                    <option value="A2">A2</option>
+                                    <option value="B1">B1</option>
+                                    <option value="B2">B2</option>
+                                    <option value="C1">C1</option>
+                                    <option value="C2">C2</option>
+                                    <option value="Madrelingua">Madrelingua</option>
+                                </select>
+                                <label for="school_String" class="mt-2">School</label>
+                                <input th:field="*{languages[__${languageStat.index}__].school_String}" class="form-control" type="text" id="'school_String'+${languageStat.index}" placeholder="CAMBRIDGE English CAE">
+                                <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removeLanguage(this)">Remove LANGUAGE</button>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-primary mt-2" onclick="addLanguage()">Add LANGUAGE</button>
                         </div>
-                        <button type="button" class="btn btn-sm btn-primary mt-2" onclick="addLanguage()">Add LANGUAGE</button>
-                    </div>
                   </section>
 
                 </div>
