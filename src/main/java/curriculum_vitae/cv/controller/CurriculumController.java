@@ -3,7 +3,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class CvController {
+public class CurriculumController {
 
     @GetMapping("/")
     public String getCv() {

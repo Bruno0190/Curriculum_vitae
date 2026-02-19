@@ -335,7 +335,12 @@
     </main>
 
     <footer id="cv_footer" class="d-flex justify-content-between m-3">
-        <button type="submit" form="row_cv" class="btn btn-success">Save CV</button>
+        <div>
+            <button type="submit" form="row_cv" class="btn btn-success me-2">Save CV</button>
+            <form th:action="@{/curriculums/delete{id}(id=${curriculum.id})}" method="post" th:if="${curriculum.id != null}" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Delete CV</button>
+            </form>
+        </div>
         <p id="trattamento_dati" class="text-end" style="font-size: 12px;">
             Autorizzo il trattamento dei miei dati personali presenti<br> nel CV ai sensi dell’art. 13 d. lgs. 30 giugno 2003 n. 196-<br> “Codice in materia di protezione dei dati personali”<br> e dell’art. 13 GDPR 679/16 -
         </p>
