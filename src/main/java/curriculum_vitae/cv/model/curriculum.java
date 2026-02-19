@@ -34,10 +34,9 @@ public class Curriculum {
     @OneToMany(mappedBy = "curriculum", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Projects> projects = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "experience_id")
-    private Experience experience;
-
+    @OneToMany(mappedBy = "curriculum", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Experience> experiences = new ArrayList<>();
+    
     @OneToMany(mappedBy = "curriculum", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Education> educations = new ArrayList<>();
 
@@ -129,12 +128,12 @@ public class Curriculum {
         this.projects = projects;
     }
 
-    public Experience getExperience() {
-        return experience;
+    public List<Experience> getExperiences() {
+        return experiences;
     }
 
-    public void setExperience(Experience experience) {
-        this.experience = experience;
+    public void setExperiences(List<Experience> experiences) {
+        this.experiences = experiences;
     }
 
     public List<Education> getEducations() {
