@@ -19,6 +19,7 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" th:href="@{/users/create}">Register</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" th:href="@{/curriculums/create}">Create your curriculum</a>
         </li>
@@ -26,6 +27,9 @@
           <a class="nav-link" th:href="@{/curriculums/edit}">Edit your curriculum</a>
         </li>
       </ul>
+        <form th:action="@{/users/login}" method="get" class="d-flex ms-auto">
+            <button type="submit" class="btn btn-link nav-link" >Login</button>
+        </form>
         <form th:action="@{/logout}" method="post" class="d-flex ms-auto">
             <button type="submit" class="btn btn-link nav-link" >Logout</button>
         </form>

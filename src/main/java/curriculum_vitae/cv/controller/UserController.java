@@ -37,7 +37,7 @@ public class UserController {
 		// Codifica password prima di salvare
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
-		return "redirect:/login";
+		return "redirect:/users/login";
 	}
 
 	// Mostra form modifica profilo
@@ -65,7 +65,7 @@ public class UserController {
 
 		userRepository.save(user);
 
-		return "redirect:/login";
+		return "redirect:/users/login";
 	}
 
 	// Mostra pagina login custom (opzionale)

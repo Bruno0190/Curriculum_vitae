@@ -28,7 +28,9 @@ public class SecurityConfiguration {
             )
             // Form login
             .formLogin(form -> form
-                .loginPage("/login") // puoi creare una pagina custom
+                .loginPage("/users/login")
+                .loginProcessingUrl("/login")
+                .usernameParameter("email")
                 .permitAll()
             )
             // Logout
