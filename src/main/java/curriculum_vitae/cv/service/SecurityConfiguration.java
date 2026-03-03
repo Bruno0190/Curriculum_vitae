@@ -22,7 +22,7 @@ public class SecurityConfiguration {
         http
             .authorizeHttpRequests(auth -> auth
                 // Pagine pubbliche
-                .requestMatchers("/", "/curriculums", "/curriculums/{id}", "/register", "/login").permitAll()
+                .requestMatchers("/", "/curriculums", "/curriculums/{id}", "/register", "/login", "/users/create").permitAll()
                 // Pagine protette: solo autenticati
                 .requestMatchers("/curriculums/create", "/curriculums/edit/**", "/curriculums/delete/**").authenticated()
             )
