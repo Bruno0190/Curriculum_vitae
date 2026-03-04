@@ -45,7 +45,7 @@
 </head>
 <body class="print-tight">
     <div th:replace="fragments/navbar"></div>
-    <header>Create your own Curriculum Vitae</header>
+
     
     <div id="container_cv" class="container">
         <form th:action ="@{/curriculums/create}" id="row_cv" class="row" method="post" th:object="${curriculum}" enctype="multipart/form-data">
@@ -53,7 +53,7 @@
             <div class="col-12 col-lg-4 left-col">
                 <!-- SEZIONE FOTO -->
                 <section id="FOTO">
-                    <label for="profile_image_area" class="form-label">Add Profile Picture</label>
+                    <label for="profile_image_area" class="py-0 px-3 form-label">Add Profile Picture</label>
                     <input class="form-control img-fluid py-0 px-3 rounded-5 mx-5 my-3" style="max-width:350px;" type="file" id="profile_image_area" name="profiles_file" accept="image/*">
                     <input type="hidden" id="profileImageUrl" th:field="*{image_profile_Url}">
                 </section>

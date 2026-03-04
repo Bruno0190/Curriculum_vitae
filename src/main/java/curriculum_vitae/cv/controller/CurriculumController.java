@@ -50,7 +50,9 @@ public class CurriculumController {
         if (cv_existing != null) {
             return "redirect:/?error=curriculum_exists";
         }
-        model.addAttribute("curriculum", new Curriculum());
+        Curriculum curriculum = new Curriculum();
+        curriculum.setUser(user.get());
+        model.addAttribute("curriculum", curriculum);
         return "curriculums/create";
     }
 
