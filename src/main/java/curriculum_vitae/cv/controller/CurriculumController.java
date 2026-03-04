@@ -35,19 +35,19 @@ public class CurriculumController {
     @GetMapping("/curriculums/create")
     public String getCreate(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) {
-            // Non autenticato: reindirizza a login con messaggio
+            System.out.println("[DEBUG] userDetails è null: non autenticato");
             return "redirect:/users/login?error=not_authenticated";
         }
-        // Recupera l'utente dal repository
+        System.out.println("[DEBUG] userDetails.getUsername(): " + userDetails.getUsername());
         Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
+        System.out.println("[DEBUG] userRepository.findByEmail(...) trovato? " + user.isPresent());
         if (user.isEmpty()) {
-            // Utente autenticato ma non presente nel DB: reindirizza a registrazione con messaggio
+            System.out.println("[DEBUG] Utente autenticato ma non presente nel DB");
             return "redirect:/users/create?error=not_registered";
         }
-        // Controlla se l'utente ha già un curriculum
         Curriculum cv_existing = curriculumRepository.findByUser(user.get());
+        System.out.println("[DEBUG] Curriculum già esistente per utente? " + (cv_existing != null));
         if (cv_existing != null) {
-            // Curriculum già esistente: reindirizza a homepage
             return "redirect:/?error=curriculum_exists";
         }
         model.addAttribute("curriculum", new Curriculum());

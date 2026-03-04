@@ -19,10 +19,9 @@ public class SecurityConfiguration {
     // Configurazione della sicurezza
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(auth -> auth
+        http.authorizeHttpRequests(auth -> auth
                 // Pagine pubbliche
-                .requestMatchers("/", "/curriculums", "/curriculums/{id}", "/register", "/login", "/users/create").permitAll()
+                .requestMatchers("/", "/curriculums", "/curriculums/{id}", "/register", "/login").permitAll()
                 // Pagine protette: solo autenticati
                 .requestMatchers("/curriculums/create", "/curriculums/edit/**", "/curriculums/delete/**").authenticated()
             )

@@ -19,6 +19,8 @@
 
 
 <form th:action="@{/login}" method="post">
+    <!-- Campo CSRF obbligatorio per Spring Security: senza questo, tutte le POST (incluso login) vengono bloccate con errore 403. Serve a prevenire attacchi CSRF. -->
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <label for="email">Email:</label>
     <input type="text" id="email" name="email" required />
     <br/>

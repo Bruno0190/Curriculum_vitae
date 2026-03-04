@@ -17,13 +17,15 @@ public class DatabaseUserDetailsService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String email) {
-        // Cerca l'utente per email (che usiamo come username)
+        System.out.println("[DEBUG] DatabaseUserDetailsService.loadUserByUsername chiamato con email: " + email);
         Optional<User> userOptional = userRepository.findByEmail(email);
+        System.out.println("[DEBUG] userRepository.findByEmail(...) trovato? " + userOptional.isPresent());
         if (userOptional.isEmpty()) {
+            System.out.println("[DEBUG] Nessun utente trovato per questa email!");
             throw new UsernameNotFoundException("User not found");
         }
         User user = userOptional.get();
-        // Qui puoi aggiungere ruoli/authorities se servono, per ora lasciamo vuoto
+        System.out.println("[DEBUG] Utente trovato: id=" + user.getId() + ", email=" + user.getEmail());
         return new DatabaseUserDetails(
             user.getId(),
             user.getEmail(), // username = email
