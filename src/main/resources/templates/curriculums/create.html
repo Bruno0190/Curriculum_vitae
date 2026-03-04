@@ -105,7 +105,8 @@
             <div class="col-12 col-lg-8 right-col">
 
                 <section id="NOME_TITOLO" class="mb-3">
-                    <h3 th:text="*{user.name}" style="font-size: 45px;"></h3><br>
+                    <!-- Il campo user.name non è valorizzato in creazione, mostro un input per il nome utente -->
+                    <h3 th:text="${#authentication.principal != null && curriculum.user != null ? curriculum.user.name : 'Utente'}" style="font-size: 45px;"></h3><br>
                     <h4 style="font-size: 25px">PROFESSIONAL TITLE</h4>
                     <label for="profile_role"></label>
                     <input th:field="*{profile_role}" class="form-control" type="text" id="profile_role" placeholder="Professional title"><br>
