@@ -14,16 +14,16 @@ function addTask(button) {
     newTaskDiv.classList.add('div_task');
 
     newTaskDiv.innerHTML = `
-        <label>Specifica della mansione</label>
+        <label>Task Specification</label>
         <input class="form-control" type="text"
                name="jobTask[${k}].task">
 
-        <label class="mt-2">Descrizione della mansione</label>
+        <label class="mt-2">Task Description</label>
         <input class="form-control" type="text"
                name="jobTask[${k}].task_description">
 
         <button type="button" class="btn btn-sm btn-danger mt-1"
-                onclick="removeTask(this)">Rimuovi</button>
+                onclick="removeTask(this)">Remove Task</button>
     `;
 
     // 5. Append del nuovo task

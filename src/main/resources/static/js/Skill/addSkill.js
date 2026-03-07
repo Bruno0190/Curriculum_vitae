@@ -9,7 +9,7 @@ function addSkill() {
     
     newSkillDiv.innerHTML = `
         <input type="text" class="form-control" placeholder="Skill" name="skills[${currentCount}].skill_name">
-        <button type="button" class="btn btn-sm btn-danger mt-1" onclick="removeSkill(this)">Rimuovi</button>
+        <button type="button" class="btn btn-sm btn-danger mt-1" onclick="removeSkill(this)">Remove</button>
     `;
     skillsContainer.appendChild(newSkillDiv);
 

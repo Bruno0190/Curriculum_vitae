@@ -30,8 +30,8 @@ function addExperience() {
             <label class="form-check-label">In Progress</label>
         </div>
 
-        <section class="mt-3">
-            <h4 style="font-size: 20px;color:cornflowerblue;">RUOLI</h4>
+        <section class="mt-3 ms-3 p-2" style="background-color:rgb(235, 235, 234); border-radius: 5px;">
+            <h4 style="font-size: 20px;color:rgb(15, 15, 237);">ROLE</h4>
 
             <div class="jobs_container">
 
@@ -57,37 +57,37 @@ function addExperience() {
                         <label class="form-check-label">In Progress</label>
                     </div>
 
-                    <section class="mt-3">
-                        <h4>MANSIONI</h4>
+                    <section class="mt-3 ms-3 p-2" style="background-color:rgb(175, 176, 161); border-radius: 5px;">
+                        <h4 style="font-size: 20px;color:rgb(15, 15, 237);">TASKS</h4>
 
                         <div class="tasks_container">
 
                             <div class="div_task">
-                                <label>Specifica della mansione</label>
+                                <label>Task Specification</label>
                                 <input class="form-control" type="text" name="experiences[${i}].jobs[0].jobTask[0].task">
 
-                                <label class="mt-2">Descrizione della mansione</label>
+                                <label class="mt-2">Task Description</label>
                                 <input class="form-control" type="text" name="experiences[${i}].jobs[0].jobTask[0].task_description">
 
                                 <button type="button" class="btn btn-sm btn-danger mt-1"
-                                onclick="removeTask(this)">Rimuovi</button>
+                                onclick="removeTask(this)">Remove Task</button>
                             </div>
 
                         </div>
 
-                        <button type="button" class="btn btn-sm btn-primary mt-2" onclick="addTask(this)">Aggiungi MANSIONE</button>
+                        <button type="button" class="btn btn-sm btn-primary mt-2" onclick="addTask(this)">Add Task</button>
                     </section>
 
-                    <button type="button" class="btn btn-sm btn-danger mt-1" onclick="removeJob(this)">Rimuovi RUOLO</button>
+                    <button type="button" class="btn btn-sm btn-danger mt-1" onclick="removeJob(this)">Remove Role</button>
 
                 </div>
 
             </div>
 
-            <button type="button" class="btn btn-sm btn-primary mt-2" onclick="addJob(this)">Aggiungi RUOLO</button>
+            <button type="button" class="btn btn-sm btn-primary mt-2" onclick="addJob(this)">Add Role</button>
         </section>
 
-        <button type="button" class="btn btn-sm btn-danger mt-3" onclick="removeExperience(this)">Rimuovi ESPERIENZA</button>
+        <button type="button" class="btn btn-sm btn-danger mt-3" onclick="removeExperience(this)">Remove Experience</button>
     `;
 
     experienceContainer.appendChild(newExperienceDiv);

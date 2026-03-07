@@ -40,32 +40,32 @@ function addJob(button) {
             <label class="form-check-label">In Progress</label>
         </div>
 
-        <section class="mt-3">
-            <h4>MANSIONI</h4>
+        <section class="mt-3 ms-3 p-2" style="background-color:rgb(175, 176, 161); border-radius: 5px;">
+            <h4 style="font-size: 20px;color:rgb(15, 15, 237);">TASK</h4>
 
             <div class="tasks_container">
 
                 <div class="div_task">
-                    <label>Specifica della mansione</label>
+                    <label>Task Specification</label>
                     <input class="form-control" type="text"
                            name="jobs[${j}].jobTask[0].task">
 
-                    <label class="mt-2">Descrizione della mansione</label>
+                    <label class="mt-2">Task Description</label>
                     <input class="form-control" type="text"
                            name="jobs[${j}].jobTask[0].task_description">
 
                     <button type="button" class="btn btn-sm btn-danger mt-1"
-                            onclick="removeTask(this)">Rimuovi</button>
+                            onclick="removeTask(this)">Remove Task</button>
                 </div>
 
             </div>
 
             <button type="button" class="btn btn-sm btn-primary mt-2"
-                    onclick="addTask(this)">Aggiungi MANSIONE</button>
+                    onclick="addTask(this)">Add Task</button>
         </section>
 
         <button type="button" class="btn btn-sm btn-danger mt-1"
-                onclick="removeJob(this)">Rimuovi RUOLO</button>
+                onclick="removeJob(this)">Remove Role</button>
     `;
 
     // 5. Append del nuovo job

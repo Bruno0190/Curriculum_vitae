@@ -26,10 +26,10 @@ function addEducation() {
             <input class="form-check-input" type="checkbox"
                    name="educations[${i}].inProgress"
                    onchange="toggleEndDateEducationFields(this)">
-            <label class="form-check-label">In corso</label>
+            <label class="form-check-label">In progress</label>
         </div>
 
-        <label class="mt-2">Descrizione titolo di studi</label>
+        <label class="mt-2">Education Description</label>
         <textarea class="form-control" name="educations[${i}].description"></textarea>
 
         <label for="certificate_image_area" class="mt-2">Upload certificate</label>
@@ -39,7 +39,7 @@ function addEducation() {
         <label class="mt-2">Enter link</label>
         <input class="form-control" type="text" name="educations[${i}].link">
 
-        <button type="button" class="btn btn-sm btn-danger mt-3" onclick="removeEducation(this)">Rimuovi ISTRUZIONE</button>
+        <button type="button" class="btn btn-sm btn-danger mt-3" onclick="removeEducation(this)">Remove Education</button>
     `;
 
     container.appendChild(newDiv);

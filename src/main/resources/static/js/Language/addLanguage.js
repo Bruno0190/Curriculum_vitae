@@ -7,20 +7,20 @@ function addLanguage() {
     newDiv.classList.add('div_language');
 
     newDiv.innerHTML = `
-        <label>Lingua</label>
+        <label>Language</label>
         <input class="form-control" type="text"
                name="languages[${i}].language_name">
 
-        <label class="mt-2">Livello</label>
+        <label class="mt-2">Proficiency Level</label>
         <input class="form-control" type="text"
                name="languages[${i}].proficiency_level">
 
-        <label class="mt-2">Scuola</label>
+        <label class="mt-2">School</label>
         <input class="form-control" type="text"
                name="languages[${i}].school">
 
         <button type="button" class="btn btn-sm btn-danger mt-2"
-                onclick="removeLanguage(this)">Rimuovi LINGUA</button>
+                onclick="removeLanguage(this)">Remove Language</button>
     `;
 
     container.appendChild(newDiv);

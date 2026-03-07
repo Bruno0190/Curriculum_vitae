@@ -13,7 +13,7 @@ function addProject() {
         <input type="text" class="form-control mt-2" placeholder="Project Link"
                name="projects[${currentCount}].url">
         <button type="button" class="btn btn-sm btn-danger mt-1"
-                onclick="removeProject(this)">Rimuovi</button>
+                onclick="removeProject(this)">Remove</button>
     `;
     projectContainer.appendChild(newProjectDiv);
 
