@@ -16,7 +16,7 @@ function addJob(button) {
     newJobDiv.innerHTML = `
         <label>Role</label>
         <input class="form-control" type="text"
-               name="jobs[${j}].jobTitle">
+               name="jobs[${j}].jobTitle" placeholder="e.g. Project Manager">
 
         <label class="mt-2">Start Month</label>
         <input class="form-control" type="number"
@@ -48,11 +48,11 @@ function addJob(button) {
                 <div class="div_task">
                     <label>Task Specification</label>
                     <input class="form-control" type="text"
-                           name="jobs[${j}].jobTask[0].task">
+                           name="jobs[${j}].jobTask[0].task" placeholder="e.g.Governance & Compliance">
 
                     <label class="mt-2">Task Description</label>
                     <input class="form-control" type="text"
-                           name="jobs[${j}].jobTask[0].task_description">
+                           name="jobs[${j}].jobTask[0].task_description" placeholder="e.g. Coordinated requirements gathering, risk assessment, and stakeholder communication.">
 
                     <button type="button" class="btn btn-sm btn-danger mt-1"
                             onclick="removeTask(this)">Remove Task</button>

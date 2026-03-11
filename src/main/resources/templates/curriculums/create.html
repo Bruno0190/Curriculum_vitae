@@ -43,12 +43,12 @@
     <link rel="stylesheet" href="/css/print_style.css">
 
 </head>
-<body class="print-tight" style="background-color:rgb(164, 219, 231);">
+<body class="print-tight" style="background-color:rgb(200, 239, 198);">
     <div th:replace="fragments/navbar"></div>
 
     
     <div id="container_cv" class="container">
-        <form th:action ="@{/curriculums/create}" id="row_cv" class="row" method="post" th:object="${curriculum}" enctype="multipart/form-data">
+        <form th:action ="@{/curriculums/create}" id="row_cv" class="row mt-3" method="post" th:object="${curriculum}" enctype="multipart/form-data">
             <!-- COLONNA SINISTRA -->
             <div class="col-12 col-lg-4 left-col">
                 <!-- SEZIONE FOTO -->
@@ -103,13 +103,11 @@
                     <!-- Il campo user.name non è valorizzato in creazione, mostro un input per il nome utente -->
                     <h3 th:text="${#authentication.principal != null && curriculum.user != null ? curriculum.user.name : 'Utente'}" style="font-size: 45px;"></h3><br>
                     <h4 style="font-size: 25px">PROFESSIONAL TITLE</h4>
-                    <label for="profile_role"></label>
                     <input th:field="*{profile_role}" class="form-control" type="text" id="profile_role" placeholder="Professional title"><br>
                 </section>
 
                 <section id="PROFILO" class="mb-3">
                     <h3 style="font-size: 25px;color:rgb(15, 15, 237);">PROFILE</h3>
-                    <label for="profile_description"></label>
                     <textarea th:field="*{profile_description}" class="form-control" id="profile_description" placeholder="Profile description" style="margin-bottom: 20px;"></textarea>
                 </section>
                 <!-- SEZIONE ESPERIENZA -->

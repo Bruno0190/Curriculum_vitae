@@ -16,11 +16,11 @@ function addTask(button) {
     newTaskDiv.innerHTML = `
         <label>Task Specification</label>
         <input class="form-control" type="text"
-               name="jobTask[${k}].task">
+               name="jobTask[${k}].task" placeholder="e.g.Governance & Compliance">
 
         <label class="mt-2">Task Description</label>
         <input class="form-control" type="text"
-               name="jobTask[${k}].task_description">
+               name="jobTask[${k}].task_description" placeholder="e.g. Coordinated requirements gathering, risk assessment, and stakeholder communication.">
 
         <button type="button" class="btn btn-sm btn-danger mt-1"
                 onclick="removeTask(this)">Remove Task</button>
