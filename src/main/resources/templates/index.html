@@ -10,26 +10,66 @@
     <!-- Thymeleaf -->
     <meta xmlns:th="http://www.thymeleaf.org">
 
+    <style>
+        body {
+            background-color: #f3f4f6;
+        }
+
+        .index-card {
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+            padding: 1.25rem;
+        }
+
+        .soft-shadow {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+        }
+
+        .table-soft {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+
 </head>
 <body>
     <div th:replace="fragments/navbar"></div>
 
     <main>
-        <div class="container">
+        <div class="container py-4">
+            <div class="index-card">
             <h1 class="my-4">Curriculum-platform</h1>
+            <div th:if="${param.error}" class="alert alert-danger">
+                <span th:switch="${param.error}">
+                    <span th:case="'cv_not_found'">CV non trovato.</span>
+                    <span th:case="'user_not_found'">Utente non trovato.</span>
+                    <span th:case="'not_authorized'">Non sei autorizzato a eseguire questa operazione.</span>
+                    <span th:case="*">Si è verificato un errore.</span>
+                </span>
+            </div>
+            <div th:if="${param.success}" class="alert alert-success">
+                <span th:switch="${param.success}">
+                    <span th:case="'language_saved'">Lingua del CV salvata correttamente.</span>
+                    <span th:case="*">Operazione completata correttamente.</span>
+                </span>
+            </div>
             <div class="row">
                 <div class="col-12">
                     <form th:action="@{/}" method="get" class="mb-4">
                         <label for="searchName" class="form-label">Search for User name</label>
                         <div class="input-group">
-                            <input type="text" id="searchName" name="name" class="form-control" placeholder="User name" th:value="${param.name}">
-                            <button type="submit" class="btn btn-primary">Search</button>
+                            <input type="text" id="searchName" name="name" class="form-control soft-shadow" placeholder="User name" th:value="${param.name}">
+                            <button type="submit" class="btn btn-primary soft-shadow">Search</button>
                         </div>
 
                     </form>
 
                     <div class="col-12">
-                        <table class="table">
+                        <table class="table table-soft">
                             <thead>
                                 <tr>
                                     <th scope="col">Name</th>
@@ -40,13 +80,20 @@
                                 <tr th:each="curriculum : ${curriculums}">
                                     <td th:text="${curriculum.user.name}">Curriculum Name</td>
                                     <td>
-                                        <a th:href="@{/curriculums/{id}(id=${curriculum.id})}" class="btn btn-sm btn-primary">View</a>
+                                        <a th:href="@{/curriculums/show/{id}(id=${curriculum.id})}" class="btn btn-sm btn-primary soft-shadow">View</a>
                                     </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(curriculums)}">
+                                    <td colspan="2">Nessun curriculum presente.</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+            </div>
+
+        </div>
 
  
     </main>

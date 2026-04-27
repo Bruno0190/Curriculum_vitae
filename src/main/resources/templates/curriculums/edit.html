@@ -43,28 +43,34 @@
 
     <link rel="stylesheet" href="/css/print_style.css">
 </head>
-<body>
+<body class="print-tight" style="background-color:rgb(200, 239, 198);">
     <div th:replace="fragments/navbar"></div>
-    <header>Edit your Curriculum Vitae</header>
 
     <main>
 
         <div id="container_cv" class="container">
-            <form id="row_cv" th:action="@{/curriculums/edit{id}(id=${curriculum.id})}" method="post"  th:object="${curriculum}" enctype="multipart/form-data">
+            <div class="alert alert-danger mt-3" th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+            <form id="row_cv" class="row mt-3" th:action="@{/curriculums/edit/{id}(id=${curriculum.id})}" method="post" enctype="multipart/form-data" th:object="${curriculum}">
+                <div class="alert alert-danger mt-3" th:if="${#fields.hasErrors('*')}">
+                    <div th:each="err : ${#fields.errors('*')}" th:text="${err}"></div>
+                </div>
+
 
                 <input type="hidden" th:field="*{id}">
             
+                <!-- COLONNA SINISTRA -->
                 <div class="col-12 col-lg-4 left-col">
+                    <!-- SEZIONE FOTO -->
                     <section id="FOTO">
 
-                        <img th:if="${#strings.isEmpty(image_profile_Url)}"
+                        <img th:if="${#strings.isEmpty(curriculum.image_profile_Url)}"
                             src="/images/Anonymous.jpeg"
                             class="img-fluid py-0 px-3 rounded-5 mx-5 my-3" 
                             style="max-width:350px;"
                             alt="Profile Picture">
 
-                        <img th:unless="${#strings.isEmpty(image_profile_Url)}"
-                            th:src="*{image_profile_Url}"
+                        <img th:unless="${#strings.isEmpty(curriculum.image_profile_Url)}"
+                            th:src="${curriculum.image_profile_Url}"
                             class="img-fluid py-0 px-3 rounded-5 mx-5 my-3" 
                             style="max-width:350px;"
                             alt="Profile Picture">
@@ -81,7 +87,7 @@
                             th:field="*{image_profile_Url}">
 
                     </section>   
-                    
+                    <!-- SEZIONE CONTATTI -->  
                     <section id="CONTATTI" class="py-0 px-3 mx-5 my-3">
 
                         <h4 style="font-size: 25px">CONTACTS</h4>
@@ -97,7 +103,7 @@
                            <input th:field="*{contacts.contact_portfolio}" class="form-control" type="text" id="contact_portfolio" placeholder="Portfolio"><br>
 
                     </section>
-            
+                    <!-- SEZIONE COMPETENZE TECNICHE -->
                     <section id="COMPETENZE_TECNICHE" class="py-0 px-3 mx-5 my-3">
                         <h4 style="font-size: 25px">HARD SKILL</h4>
 
@@ -203,8 +209,8 @@
                                         class="form-control"
                                         th:id="'companyDesc_' + ${expStat.index}"></textarea>
                                 <!-- ===================== JOBS/ROLES SECTION ===================== -->
-                                <section class="mt-3">
-                                    <h4 style="font-size: 20px">ROLES</h4>
+                                <section id="LAVORO" class="mt-3 ms-3">
+                                    <h4 style="font-size: 20px; color:rgb(15, 15, 237);">ROLE</h4>
                                     <div class="jobs_container">
                                         <div class="div_job" th:each="job, jobStat : ${experience.jobs}" th:id="'experience_' + ${expStat.index} + '_job_' + ${jobStat.index}">
                                             <label th:for="'jobTitle_' + ${expStat.index} + '_' + ${jobStat.index}">Role</label>
@@ -295,7 +301,7 @@
                                 <textarea th:field="*{educations[__${educationStat.index}__].description}" class="form-control" id="'description'+${educationStat.index}" rows="3"></textarea>
                                 <label for="certificate_image_area" class="mt-2">Upload certificate</label>
                                 <input class="form-control certificate_image_input" type="file" name="certificates_files" accept="image/*,application/pdf" id="'certificate_image_area'+${educationStat.index}">
-                                <input type="hidden" class="certificate_url_input" th:field="*{educations[__${educationStat.index}__].imageCertificateUrl}">
+                                <input type="hidden" class="certificate_url_input" th:field="*{educations[__${educationStat.index}__].image_certificate_Url}">
                                 <label for="link">Enter link</label>
                                 <input th:field="*{educations[__${educationStat.index}__].link}" class="form-control mt-2" type="text" id="'link'+${educationStat.index}" placeholder="https://www.universita.it/laurea-in-medicina">
                                 <button type="button" class="btn btn-sm btn-danger mt-3" onclick="removeEducation(this)">Remove EDUCATION</button>

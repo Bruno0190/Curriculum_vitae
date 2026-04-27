@@ -33,8 +33,8 @@ function addEducation() {
         <textarea class="form-control" name="educations[${i}].description"></textarea>
 
         <label for="certificate_image_area" class="mt-2">Upload certificate</label>
-        <input class="form-control certificate_image_input" type="file" name="educations[${i}].certificate_files" accept="image/*,application/pdf">
-        <input type="text" class="certificate_url_input mt-2" name="educations[${i}].imageCertificateUrl">
+        <input class="form-control certificate_image_input" type="file" name="certificates_files" accept="image/*,application/pdf">
+        <input type="hidden" class="certificate_url_input" name="educations[${i}].image_certificate_Url">
 
         <label class="mt-2">Enter link</label>
         <input class="form-control" type="text" name="educations[${i}].link">

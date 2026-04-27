@@ -44,7 +44,10 @@ public class UserController {
 	@GetMapping("/edit/{id}")
 	public String showEditForm(@PathVariable("id") Long id, Model model) {
 		
-        User user = userRepository.findById(id).orElseThrow();
+		User user = userRepository.findById(id).orElse(null);
+		if (user == null) {
+			return "redirect:/?error=user_not_found";
+		}
 
 		model.addAttribute("user", user);
 		return "users/edit";
@@ -57,7 +60,10 @@ public class UserController {
 			return "users/edit";
 		}
 
-		User user = userRepository.findById(id).orElseThrow();
+		User user = userRepository.findById(id).orElse(null);
+		if (user == null) {
+			return "redirect:/?error=user_not_found";
+		}
 		user.setName(userForm.getName());
 		user.setEmail(userForm.getEmail());
 		// Codifica password prima di salvare
@@ -77,6 +83,6 @@ public class UserController {
 	// Logout (Spring Security gestisce, ma puoi mostrare una pagina di conferma)
 	@GetMapping("/logout-success")
 	public String logoutSuccess() {
-		return "users/logout-success";
+		return "redirect:/";
 	}
 }

@@ -5,7 +5,8 @@
 </head>
 <body>
 <h2>Modifica Profilo</h2>
-<form th:action="@{/users/edit}" th:object="${user}" method="post">
+<form th:action="@{/users/edit/{id}(id=${user.id})}" th:object="${user}" method="post">
+
     <input type="hidden" th:field="*{id}" />
     <label for="name">Nome:</label>
     <input type="text" id="name" th:field="*{name}" required />

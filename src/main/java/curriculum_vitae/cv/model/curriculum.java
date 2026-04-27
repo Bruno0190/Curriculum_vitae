@@ -27,7 +27,7 @@ public class Curriculum {
     @OneToMany(mappedBy = "curriculum", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Skill> skills = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "contact_id")
     private Contacts contacts;
 
@@ -55,9 +55,12 @@ public class Curriculum {
     @NotBlank(message = "Profile role is mandatory")
     private String profile_role;
 
-    @Column()
+    @Column(columnDefinition = "TEXT")
     @NotBlank(message = "Profile description is mandatory")
     private String profile_description;
+
+    @Column(name = "preferred_language")
+    private String preferredLanguage;
 
     /* Costruttore */
     public Curriculum() {
@@ -66,6 +69,10 @@ public class Curriculum {
     /* Getter e Setter */
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getImage_profile_Url() {
@@ -94,6 +101,14 @@ public class Curriculum {
 
     public void setProfile_description(String profile_description) {
         this.profile_description = profile_description;
+    }
+
+    public String getPreferredLanguage() {
+        return preferredLanguage;
+    }
+
+    public void setPreferredLanguage(String preferredLanguage) {
+        this.preferredLanguage = preferredLanguage;
     }
 
     public User getUser() {

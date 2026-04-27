@@ -26,10 +26,10 @@ public class Projects {
     @Column
     private String projectName;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column
+    @Column(length = 2048)
     private String url;
 
     /* Costruttore */

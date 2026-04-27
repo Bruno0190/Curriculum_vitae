@@ -5,6 +5,12 @@
 
 @media print {
 
+  nav,
+  .navbar,
+  header {
+    display: none !important;
+  }
+
   /* RESET BASE */
   *, *::before, *::after {
     box-sizing: border-box !important;
@@ -121,6 +127,42 @@
   #ISTRUZIONE li,
   #LINGUE li {
     margin-bottom: 3px !important; /* spazio minimo ma visibile */
+  }
+
+  /* PERIODI TEMPORALI PIU' COMPATTI */
+  .experience-period,
+  .education-period,
+  #ESPERIENZA .text-muted,
+  #ISTRUZIONE .text-muted {
+    font-size: 7.1pt !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    display: inline-block !important;
+  }
+
+  /* TASK MOLTO PIU' PICCOLE */
+  #TASK {
+    margin-top: 1px !important;
+  }
+
+  #TASK ul {
+    margin: 1px 0 0 0 !important;
+    padding-left: 10px !important;
+  }
+
+  #TASK li {
+    margin-bottom: 1px !important;
+    line-height: 1 !important;
+  }
+
+  .task-title {
+    font-size: 6.9pt !important;
+    font-weight: 600 !important;
+  }
+
+  .task-description {
+    font-size: 6.7pt !important;
+    font-weight: 400 !important;
   }
 
 

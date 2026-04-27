@@ -48,7 +48,15 @@
 
     
     <div id="container_cv" class="container">
-        <form th:action ="@{/curriculums/create}" id="row_cv" class="row mt-3" method="post" th:object="${curriculum}" enctype="multipart/form-data">
+        <div class="alert alert-info mt-3" th:if="${param.from != null and param.from[0] == 'edit_no_cv'}">
+            Nessun curriculum trovato per il tuo account. Compila questo form per creare il tuo primo curriculum.
+        </div>
+        <div class="alert alert-danger mt-3" th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+        <form th:action="@{/curriculums/create}" id="row_cv" class="row mt-3" method="post" enctype="multipart/form-data" th:object="${curriculum}">
+            <div class="alert alert-danger mt-3" th:if="${#fields.hasErrors('*')}">
+                <div th:each="err : ${#fields.errors('*')}" th:text="${err}"></div>
+            </div>
+
             <!-- COLONNA SINISTRA -->
             <div class="col-12 col-lg-4 left-col">
                 <!-- SEZIONE FOTO -->
@@ -298,7 +306,7 @@
 
                             <label for="certificate_image_area" class="mt-2">Upload certificate</label>
                             <input class="form-control certificate_image_input" type="file" name="certificates_files" accept="image/*,application/pdf" id="'certificate_image_area'+${educationStat.index}">
-                            <input type="hidden" class="certificate_url_input" th:field="*{educations[__${educationStat.index}__].imageCertificateUrl}">
+                            <input type="hidden" class="certificate_url_input" th:field="*{educations[__${educationStat.index}__].image_certificate_Url}">
 
                             <label for="link">Enter link</label>
                             <input th:field="*{educations[__${educationStat.index}__].link}" class="form-control mt-2" type="text" id="'link'+${educationStat.index}" placeholder="https://www.universita.it/laurea-in-medicina">

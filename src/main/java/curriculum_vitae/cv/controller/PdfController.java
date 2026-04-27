@@ -5,6 +5,7 @@ package curriculum_vitae.cv.controller;
 import jakarta.servlet.http.HttpServletResponse; // Per manipolare la risposta HTTP
 import org.springframework.stereotype.Controller; // Indica che questa classe è un Controller Spring MVC
 import org.springframework.web.bind.annotation.GetMapping; // Per mappare richieste GET
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.*; // Per gestire input/output di file e stream
 
@@ -12,8 +13,17 @@ import java.io.*; // Per gestire input/output di file e stream
 @Controller // Indica a Spring che questa classe gestisce richieste web
 public class PdfController {
 
-    @GetMapping("/genera-pdf") // Mappa la richiesta GET /genera-pdf a questo metodo
-    public void generaPdf(HttpServletResponse response) throws IOException, InterruptedException {
+    @GetMapping("/genera-pdf")
+    public void generaPdfLegacy(HttpServletResponse response) throws IOException, InterruptedException {
+        generaPdfFromUrl("http://localhost:8080/", response);
+    }
+
+    @GetMapping("/genera-pdf/{id}") // Mappa la richiesta GET /genera-pdf/{id} a questo metodo
+    public void generaPdf(@PathVariable Long id, HttpServletResponse response) throws IOException, InterruptedException {
+        generaPdfFromUrl("http://localhost:8080/curriculums/show/" + id, response);
+    }
+
+    private void generaPdfFromUrl(String url, HttpServletResponse response) throws IOException, InterruptedException {
         // Percorso dell'eseguibile di Chrome (deve esistere su questa macchina)
         String chromePath = "C:\\Programmi\\Google\\Chrome\\Application\\chrome.exe";
         // Percorso temporaneo dove verrà salvato il PDF generato
@@ -32,7 +42,7 @@ public class PdfController {
                 "--no-sandbox", // disabilita la sandbox (necessario in alcuni ambienti)
                 "--print-to-pdf-no-header", // non aggiunge header al PDF
                 "--print-to-pdf=" + pdfPath, // specifica dove salvare il PDF
-                "http://localhost:8080/" // URL della pagina da stampare (la home del sito)
+                url // URL della pagina da stampare
         );
 
         // Avvia il processo e attende che termini (cioè che Chrome generi il PDF)

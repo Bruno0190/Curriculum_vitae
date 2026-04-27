@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.JoinColumn;
 
 @Entity
@@ -28,9 +29,9 @@ public class Education {
     private String title;
 
     @Column(nullable = false)
-    @NotBlank
+    @NotNull
     private Integer startMonth;
-    @NotBlank
+    @NotNull
     private Integer startYear;
     private Integer endMonth;
     private Integer endYear;
