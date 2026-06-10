@@ -71,16 +71,8 @@ public class Curriculum {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getImage_profile_Url() {
         return image_profile_Url;
-    }
-
-    public void setImage_profile_Url(String image_profile_Url) {
-        this.image_profile_Url = image_profile_Url;
     }
 
     public String getProfileName() {
@@ -91,76 +83,84 @@ public class Curriculum {
         return profile_role;
     }
 
-    public void setProfile_role(String profile_role) {
-        this.profile_role = profile_role;
-    }
-
     public String getProfile_description() {
         return profile_description;
-    }
-
-    public void setProfile_description(String profile_description) {
-        this.profile_description = profile_description;
     }
 
     public String getPreferredLanguage() {
         return preferredLanguage;
     }
 
-    public void setPreferredLanguage(String preferredLanguage) {
-        this.preferredLanguage = preferredLanguage;
-    }
-
     public User getUser() {
         return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public List<Skill> getSkills() {
         return skills;
     }
 
-    public void setSkills(List<Skill> skills) {
-        this.skills = skills;
-    }
-
     public Contacts getContacts() {
         return contacts;
-    }
-
-    public void setContacts(Contacts contacts) {
-        this.contacts = contacts;
     }
 
     public List<Projects> getProjects() {
         return projects;
     }
 
-    public void setProjects(List<Projects> projects) {
-        this.projects = projects;
-    }
-
     public List<Experience> getExperiences() {
         return experiences;
-    }
-
-    public void setExperiences(List<Experience> experiences) {
-        this.experiences = experiences;
     }
 
     public List<Education> getEducations() {
         return educations;
     }
 
-    public void setEducations(List<Education> educations) {
-        this.educations = educations;
-    }
-
     public List<Language> getLanguages() {
         return languages;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setImage_profile_Url(String image_profile_Url) {
+        this.image_profile_Url = image_profile_Url;
+    }
+
+    public void setProfile_role(String profile_role) {
+        this.profile_role = profile_role;
+    }
+
+    public void setProfile_description(String profile_description) {
+        this.profile_description = profile_description;
+    }
+
+    public void setPreferredLanguage(String preferredLanguage) {
+        this.preferredLanguage = preferredLanguage;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setSkills(List<Skill> skills) {
+        this.skills = skills;
+    }
+
+    public void setContacts(Contacts contacts) {
+        this.contacts = contacts;
+    }
+
+    public void setProjects(List<Projects> projects) {
+        this.projects = projects;
+    }
+
+    public void setExperiences(List<Experience> experiences) {
+        this.experiences = experiences;
+    }
+
+    public void setEducations(List<Education> educations) {
+        this.educations = educations;
     }
 
     public void setLanguages(List<Language> languages) {
