@@ -242,7 +242,26 @@
                             </span>
                             <br>
                             <p class="mb-1" th:text="${tradotto['education_description_' + eduStat.index] != null and !#strings.isEmpty(tradotto['education_description_' + eduStat.index]) ? tradotto['education_description_' + eduStat.index] : education.description}"></p>
-                            <a th:unless="${#strings.isEmpty(education.image_certificate_Url)}" th:href="${education.image_certificate_Url}" target="_blank" rel="noopener noreferrer">View Degree</a>
+                            <button th:unless="${#strings.isEmpty(education.image_certificate_Url)}" 
+                                    type="button" 
+                                    class="btn btn-link p-0 bg-transparent text-primary decoration-none" 
+                                    data-bs-toggle="modal" 
+                                    th:data-bs-target="'#certModal-' + ${eduStat.index}">
+                                View Degree
+                            </button>
+                            <div class="modal fade" th:id="'certModal-' + ${eduStat.index}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" th:text="${education.title}">Certificato</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center bg-light">
+                                    <img th:src="${education.image_certificate_Url}" class="img-fluid rounded shadow-sm" alt="Certificato">
+                                </div>
+                                </div>
+                            </div>
+                            </div>
                             <span th:if="${!#strings.isEmpty(education.image_certificate_Url) and !#strings.isEmpty(education.link)}"> | </span>
                             <a th:unless="${#strings.isEmpty(education.link)}" th:href="${education.link}" target="_blank" rel="noopener noreferrer">Link Reference</a>
                         </li>
