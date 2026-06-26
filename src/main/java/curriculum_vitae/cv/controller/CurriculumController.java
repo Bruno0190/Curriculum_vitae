@@ -15,10 +15,7 @@ import curriculum_vitae.cv.model.User;
 import curriculum_vitae.cv.repository.UserRepository;
 import curriculum_vitae.cv.service.FileStorage;
 import curriculum_vitae.cv.service.TranslationService;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -129,12 +126,14 @@ public class CurriculumController {
         }
 
         if (profileFile != null && !profileFile.isEmpty()) {
-            String uploadedUrl = fileStorage.storeFile(profileFile, "profiles");
-            if (uploadedUrl == null) {
-                bindingResult.reject("curriculum.image.upload.failed", "Errore nel caricamento della foto profilo.");
+            // Trasformiamo la foto in stringa di testo al volo!
+            String base64Image = convertToBase64(profileFile);
+            if (base64Image == null) {
+                bindingResult.reject("curriculum.image.upload.failed", "Errore nella conversione della foto profilo.");
                 return "curriculums/create";
             }
-            curriculum.setImage_profile_Url(uploadedUrl);
+            // Salva la stringa direttamente nel campo del database
+            curriculum.setImage_profile_Url(base64Image);
         }
 
         if (certificateFiles != null && curriculum.getEducations() != null) {
@@ -144,12 +143,12 @@ public class CurriculumController {
                 if (certificateFile == null || certificateFile.isEmpty()) {
                     continue;
                 }
-                String uploadedUrl = fileStorage.storeFile(certificateFile, "certificates");
-                if (uploadedUrl == null) {
-                    bindingResult.reject("curriculum.certificate.upload.failed", "Errore nel caricamento del certificato.");
+                String base64Certificate = convertToBase64(certificateFile);
+                if (base64Certificate == null) {
+                    bindingResult.reject("curriculum.certificate.upload.failed", "Errore nella conversione del certificato.");
                     return "curriculums/create";
                 }
-                curriculum.getEducations().get(i).setImage_certificate_Url(uploadedUrl);
+                curriculum.getEducations().get(i).setImage_certificate_Url(base64Certificate);
             }
         }
 
@@ -254,24 +253,21 @@ public class CurriculumController {
 
         // Gestione foto profilo
         if (profileFile != null && !profileFile.isEmpty()) {
-            String uploadedUrl = fileStorage.storeFile(profileFile, "profiles");
-            if (uploadedUrl == null) {
-                bindingResult.reject("curriculum.image.upload.failed", "Errore nel caricamento della foto profilo.");
-                return "curriculums/edit";
+            // Trasformiamo la foto in stringa di testo al volo!
+            String base64Image = convertToBase64(profileFile);
+            if (base64Image == null) {
+                bindingResult.reject("curriculum.image.upload.failed", "Errore nella conversione della foto profilo.");
+                return "curriculums/create";
             }
-            curriculum.setImage_profile_Url(uploadedUrl);
+            // Salva la stringa direttamente nel campo del database
+            curriculum.setImage_profile_Url(base64Image);
         }
 
         String incomingUrl = curriculum.getImage_profile_Url();
         String existingUrl = existingCurriculum.getImage_profile_Url();
         if (incomingUrl == null || incomingUrl.isBlank()) {
-            // Nessuna nuova foto: mantieni la precedente
             curriculum.setImage_profile_Url(existingUrl);
-        } else if (!incomingUrl.equals(existingUrl)) {
-            // Nuova foto diversa: elimina il vecchio file
-            fileStorage.deleteFile(existingUrl);
         }
-
         if (curriculum.getContacts() == null) {
             curriculum.setContacts(existingCurriculum.getContacts() != null ? existingCurriculum.getContacts() : new Contacts());
         }
@@ -283,9 +279,9 @@ public class CurriculumController {
                 if (certificateFile == null || certificateFile.isEmpty()) {
                     continue;
                 }
-                String uploadedUrl = fileStorage.storeFile(certificateFile, "certificates");
-                if (uploadedUrl == null) {
-                    bindingResult.reject("curriculum.certificate.upload.failed", "Errore nel caricamento del certificato.");
+                String base64Certificate = convertToBase64(certificateFile);
+                if (base64Certificate == null) {
+                    bindingResult.reject("curriculum.certificate.upload.failed", "Errore nella conversione del certificato.");
                     return "curriculums/edit";
                 }
 
@@ -294,8 +290,8 @@ public class CurriculumController {
                     oldCertificateUrl = existingCurriculum.getEducations().get(i).getImage_certificate_Url();
                 }
 
-                curriculum.getEducations().get(i).setImage_certificate_Url(uploadedUrl);
-                if (oldCertificateUrl != null && !oldCertificateUrl.isBlank() && !oldCertificateUrl.equals(uploadedUrl)) {
+                curriculum.getEducations().get(i).setImage_certificate_Url(base64Certificate);
+                if (oldCertificateUrl != null && !oldCertificateUrl.isBlank() && !oldCertificateUrl.equals(base64Certificate)) {
                     fileStorage.deleteFile(oldCertificateUrl);
                 }
             }
@@ -390,6 +386,17 @@ public class CurriculumController {
 
         for (Language language : curriculum.getLanguages()) {
             language.setCurriculum(curriculum);
+        }
+    }
+
+    private String convertToBase64(MultipartFile file) {
+        try {
+            byte[] bytes = file.getBytes();
+            String base64 = java.util.Base64.getEncoder().encodeToString(bytes);
+            // Questo prefisso dice al browser: "Ehi, sono un'immagine PNG/JPG, leggimi direttamente!"
+            return "data:" + file.getContentType() + ";base64," + base64;
+        } catch (java.io.IOException e) {
+            return null;
         }
     }
 
