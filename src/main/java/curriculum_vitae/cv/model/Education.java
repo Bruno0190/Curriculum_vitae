@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 
 @Entity
 @Table(name = "educations")
@@ -40,7 +41,8 @@ public class Education {
     @Column(length = 2000)
     private String description;
 
-    @Column()
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String image_certificate_Url;
 
     @Column()
