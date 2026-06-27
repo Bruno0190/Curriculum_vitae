@@ -392,7 +392,7 @@ public class CurriculumController {
     private String convertToBase64(MultipartFile file) {
         try {
             byte[] bytes = file.getBytes();
-            String base64 = java.util.Base64.getEncoder().encodeToString(bytes);
+            String base64 = Base64.getEncoder().encodeToString(bytes);
             // Questo prefisso dice al browser: "Ehi, sono un'immagine PNG/JPG, leggimi direttamente!"
             return "data:" + file.getContentType() + ";base64," + base64;
         } catch (java.io.IOException e) {
