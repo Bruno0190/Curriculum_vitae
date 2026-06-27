@@ -28,6 +28,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
+import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
+import org.springframework.http.*;
+
 
 @Controller
 public class CurriculumController {
@@ -397,6 +401,40 @@ public class CurriculumController {
             return "data:" + file.getContentType() + ";base64," + base64;
         } catch (java.io.IOException e) {
             return null;
+        }
+    }
+
+
+    @GetMapping("/genera-pdf/{id}")
+    public ResponseEntity<byte[]> generaPdf(@PathVariable Long id) {
+        try {
+            // 1. Specifica il percorso del tuo file javascript (es: "src/main/resources/js/pdf.js" o dove lo tieni)
+            String percorsoScript = "nome_del_tuo_script.js"; 
+
+            // 2. Eseguiamo il comando da terminale: node nome_script.js ID
+            ProcessBuilder pb = new ProcessBuilder("node", percorsoScript, String.valueOf(id));
+            Process process = pb.start();
+
+            // 3. Catturiamo i byte che lo script scrive in 'process.stdout.write'
+            InputStream is = process.getInputStream();
+            byte[] pdfBytes = is.readAllBytes();
+            process.waitFor();
+
+            // 4. Se il buffer è vuoto, qualcosa è andato storto nello script node
+            if (pdfBytes.length == 0) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            // 5. Mandiamo il file al browser forzando il download
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "CV_" + id + ".pdf");
+
+            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
