@@ -10,7 +10,7 @@
     <!-- Thymeleaf -->
     <meta xmlns:th="http://www.thymeleaf.org">
     <!-- CSS Per Stampa -->
-    <link rel="stylesheet" href="/css/print_style.css">
+    <link rel="stylesheet" th:href="@{/css/print_style.css}" media="all">
     <!-- Semplice CSS per lista senza punti -->
     <style>
         .no-bullet {
