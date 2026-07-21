@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.InputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Controller
 public class PdfController {
@@ -17,8 +19,12 @@ public class PdfController {
     @GetMapping("/genera-pdf/{id}")
     public ResponseEntity<byte[]> generaPdf(@PathVariable Long id) {
         try {
-            // Se metti il file pdf.js nella cartella principale del progetto su GitHub
-            String percorsoScript = "./src/main/resources/static/js/pdf.js";
+            // In container/prod il progetto vive in /app; in locale resta disponibile il path relativo.
+            String containerScriptPath = "/app/src/main/resources/static/js/pdf.js";
+            String localScriptPath = "./src/main/resources/static/js/pdf.js";
+            String percorsoScript = Files.exists(Path.of(containerScriptPath))
+                    ? containerScriptPath
+                    : localScriptPath;
 
             // Prepariamo il comando: node ./pdf.js ID
             ProcessBuilder pb = new ProcessBuilder("node", percorsoScript, String.valueOf(id));
@@ -34,7 +40,11 @@ public class PdfController {
             // Catturiamo i byte del PDF generato dallo script
             InputStream is = process.getInputStream();
             byte[] pdfBytes = is.readAllBytes();
-            process.waitFor();
+            int exitCode = process.waitFor();
+
+            if (exitCode != 0) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
 
             // Se il buffer è vuoto, qualcosa è andato storto
             if (pdfBytes.length == 0) {
