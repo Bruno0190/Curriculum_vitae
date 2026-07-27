@@ -1,6 +1,5 @@
 # Fase 1: Compilazione del codice Java
-FROM eclipse-temurin:17-jdk AS build
-RUN apt-get update && apt-get install -y maven
+FROM maven:3.9.9-eclipse-temurin-17 AS build
 WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
@@ -11,12 +10,17 @@ FROM ghcr.io/puppeteer/puppeteer:22.6.0
 # Diventiamo root temporaneamente per installare Java senza rompere i permessi
 USER root
 
-# Installiamo Java 17 (OpenJDK) dentro l'ambiente Puppeteer
-RUN rm -f /etc/apt/sources.list.d/google-chrome.list \
-    && apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends openjdk-17-jre-headless \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Rimuoviamo eventuali repository Chrome legacy con chiavi non valide e installiamo Java 17.
+RUN set -eux; \
+	for file in /etc/apt/sources.list /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources; do \
+		if [ -f "$file" ]; then \
+			sed -i '/dl-ssl.google.com\/linux\/chrome\/deb/d;/dl.google.com\/linux\/chrome\/deb/d' "$file"; \
+		fi; \
+	done; \
+	apt-get update; \
+	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends openjdk-17-jre-headless ca-certificates; \
+	apt-get clean; \
+	rm -rf /var/lib/apt/lists/*
 
 # Configura la cartella di lavoro
 WORKDIR /app
