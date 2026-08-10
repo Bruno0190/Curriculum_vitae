@@ -12,12 +12,14 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 @Controller
 public class PdfController {
 
     @GetMapping("/genera-pdf/{id}")
     public ResponseEntity<byte[]> generaPdf(@PathVariable Long id) {
+        Path tempPdfPath = null;
         try {
             // In container/prod il progetto vive in /app; in locale resta disponibile il path relativo.
             String containerScriptPath = "/app/src/main/resources/static/js/pdf.js";
@@ -26,17 +28,19 @@ public class PdfController {
                     ? containerScriptPath
                     : localScriptPath;
 
-            // Prepariamo il comando: node ./pdf.js ID
-            ProcessBuilder pb = new ProcessBuilder("node", percorsoScript, String.valueOf(id));
+            tempPdfPath = Files.createTempFile("cv-" + id + "-", ".pdf");
+
+            // Prepariamo il comando: node ./pdf.js ID /tmp/file.pdf
+            ProcessBuilder pb = new ProcessBuilder("node", percorsoScript, String.valueOf(id), tempPdfPath.toString());
             
             // Passiamo le variabili d'ambiente (serve a Node per leggere RENDER_EXTERNAL_URL)
             pb.environment().putAll(System.getenv());
 
             Process process = pb.start();
 
-            // Catturiamo i byte del PDF generato dallo script
+            // Leggiamo l'output solo per non saturare il buffer del processo.
             InputStream is = process.getInputStream();
-            byte[] pdfBytes = is.readAllBytes();
+            is.readAllBytes();
             byte[] errorBytes = process.getErrorStream().readAllBytes();
             int exitCode = process.waitFor();
 
@@ -45,6 +49,13 @@ public class PdfController {
                 System.err.println("PDF generation failed for curriculum " + id + ": " + errorLog);
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
+
+            if (tempPdfPath == null || !Files.exists(tempPdfPath)) {
+                System.err.println("PDF generation failed for curriculum " + id + ": output file not found.");
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            byte[] pdfBytes = Files.readAllBytes(tempPdfPath);
 
             // Se il buffer è vuoto, qualcosa è andato storto
             if (pdfBytes.length == 0) {
@@ -61,6 +72,14 @@ public class PdfController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            if (tempPdfPath != null) {
+                try {
+                    Files.deleteIfExists(tempPdfPath);
+                } catch (Exception ignored) {
+                    // Best effort cleanup.
+                }
+            }
         }
     }
 }

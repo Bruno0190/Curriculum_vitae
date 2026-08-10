@@ -1,15 +1,34 @@
 const puppeteer = require('puppeteer');
+const fs = require('fs');
 
 (async () => {
   const curriculumId = process.argv[2];
+  const outputPath = process.argv[3];
 
   if (!curriculumId) {
     console.error('Errore: ID curriculum mancante!');
     process.exit(1);
   }
 
-  const rawBaseUrl = process.env.PDF_BASE_URL || process.env.RENDER_EXTERNAL_URL || 'http://localhost:8080';
-  const baseUrl = rawBaseUrl.replace(/\/$/, '');
+  if (!outputPath) {
+    console.error('Errore: percorso output PDF mancante!');
+    process.exit(1);
+  }
+
+  const runtimePort = process.env.PORT || '8080';
+  const internalBaseUrl = `http://127.0.0.1:${runtimePort}`;
+  const externalBaseUrl = process.env.RENDER_EXTERNAL_URL;
+  const configuredBaseUrl = process.env.PDF_BASE_URL;
+
+  const candidateBaseUrls = [
+    configuredBaseUrl,
+    internalBaseUrl,
+    externalBaseUrl,
+    'http://localhost:8080'
+  ]
+    .filter(Boolean)
+    .map((url) => url.replace(/\/$/, ''))
+    .filter((value, index, self) => self.indexOf(value) === index);
 
   let browser;
 
@@ -22,18 +41,34 @@ const puppeteer = require('puppeteer');
     const page = await browser.newPage();
     await page.emulateMediaType('print');
 
-    await page.goto(`${baseUrl}/curriculums/show/${curriculumId}`, {
-      waitUntil: 'domcontentloaded',
-      timeout: 60000
-    });
+    let loaded = false;
+    let lastError = null;
 
-    await page.waitForNetworkIdle({ idleTime: 500, timeout: 60000 });
-    await page.waitForSelector('#container_cv', { timeout: 10000 });
-    await page.evaluate(async () => {
-      if (document.fonts && document.fonts.ready) {
-        await document.fonts.ready;
+    for (const baseUrl of candidateBaseUrls) {
+      try {
+        await page.goto(`${baseUrl}/curriculums/show/${curriculumId}`, {
+          waitUntil: 'domcontentloaded',
+          timeout: 60000
+        });
+
+        await page.waitForNetworkIdle({ idleTime: 500, timeout: 60000 });
+        await page.waitForSelector('#container_cv', { timeout: 10000 });
+        await page.evaluate(async () => {
+          if (document.fonts && document.fonts.ready) {
+            await document.fonts.ready;
+          }
+        });
+
+        loaded = true;
+        break;
+      } catch (error) {
+        lastError = error;
       }
-    });
+    }
+
+    if (!loaded) {
+      throw new Error(`Nessun base URL raggiungibile per il rendering (${lastError ? lastError.message : 'errore sconosciuto'})`);
+    }
 
     const pdfBuffer = await page.pdf({
       format: 'A4',
@@ -43,7 +78,8 @@ const puppeteer = require('puppeteer');
       margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' }
     });
 
-    process.stdout.write(pdfBuffer);
+    fs.writeFileSync(outputPath, pdfBuffer);
+    process.stdout.write('PDF_OK');
   } catch (error) {
     console.error(`Errore generazione PDF: ${error.message}`);
     process.exit(1);
