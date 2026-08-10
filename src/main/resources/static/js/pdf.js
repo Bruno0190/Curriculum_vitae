@@ -1,41 +1,57 @@
 const puppeteer = require('puppeteer');
 
 (async () => {
-  // 1. Recuperiamo l'ID che gli passeremo da riga di comando
   const curriculumId = process.argv[2];
-  
+
   if (!curriculumId) {
-    console.error("Errore: ID curriculum mancante!");
+    console.error('Errore: ID curriculum mancante!');
     process.exit(1);
   }
 
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'] 
-  });
+  const rawBaseUrl = process.env.PDF_BASE_URL || process.env.RENDER_EXTERNAL_URL || 'http://localhost:8080';
+  const baseUrl = rawBaseUrl.replace(/\/$/, '');
 
-  const page = await browser.newPage();
+  let browser;
 
-  // 2. Controllo URL: se siamo su Render usa la sua variabile, altrimenti localhost
-  const baseUrl = process.env.RENDER_EXTERNAL_URL || 'http://localhost:8080';
+  try {
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+    });
 
-  // 3. Naviga alla pagina esatta del CV usando l'ID
-  await page.goto(`${baseUrl}/curriculums/show/${curriculumId}`, {
-    waitUntil: 'networkidle0'
-  });
+    const page = await browser.newPage();
+    await page.emulateMediaType('print');
 
-  // 4. Genera il PDF in memoria
-  const pdfBuffer = await page.pdf({
-    format: 'A4',
-    printBackground: true, 
-    margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' } 
-  });
+    await page.goto(`${baseUrl}/curriculums/show/${curriculumId}`, {
+      waitUntil: 'domcontentloaded',
+      timeout: 60000
+    });
 
-  await browser.close();
+    await page.waitForNetworkIdle({ idleTime: 500, timeout: 60000 });
+    await page.waitForSelector('#container_cv', { timeout: 10000 });
+    await page.evaluate(async () => {
+      if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+      }
+    });
 
-  // 5. Spedisce i byte del PDF direttamente sulla console (stdout)
-  // Questo serve a Java per "intercettare" il file senza salvarlo sul disco fisso
-  process.stdout.write(pdfBuffer);
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      preferCSSPageSize: true,
+      tagged: true,
+      margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' }
+    });
+
+    process.stdout.write(pdfBuffer);
+  } catch (error) {
+    console.error(`Errore generazione PDF: ${error.message}`);
+    process.exit(1);
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
+  }
 })();
 
 

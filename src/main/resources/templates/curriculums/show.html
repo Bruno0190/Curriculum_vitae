@@ -244,11 +244,18 @@
                             <p class="mb-1" th:text="${tradotto['education_description_' + eduStat.index] != null and !#strings.isEmpty(tradotto['education_description_' + eduStat.index]) ? tradotto['education_description_' + eduStat.index] : education.description}"></p>
                             <button th:unless="${#strings.isEmpty(education.image_certificate_Url)}" 
                                     type="button" 
-                                    class="btn btn-link p-0 bg-transparent text-primary decoration-none" 
+                                    class="btn btn-link p-0 bg-transparent text-primary decoration-none d-print-none" 
                                     data-bs-toggle="modal" 
                                     th:data-bs-target="'#certModal-' + ${eduStat.index}">
                                 View Degree
                             </button>
+                            <a th:unless="${#strings.isEmpty(education.image_certificate_Url)}"
+                               th:href="${education.image_certificate_Url}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="d-none d-print-inline text-primary text-decoration-none">
+                                View Degree
+                            </a>
                             <div class="modal fade" th:id="'certModal-' + ${eduStat.index}" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                 <div class="modal-content">
@@ -339,9 +346,9 @@
                 <button type="submit" class="btn btn-sm btn-outline-success">Save language</button>
             </form>
 
-            <button th:onclick="|window.location.href='/genera-pdf/' + ${curriculum.id}|">
+            <a th:href="@{/genera-pdf/{id}(id=${curriculum.id})}" class="btn btn-sm btn-dark">
                 Scarica PDF
-            </button>
+            </a>
         </div>
     </footer>
     <script>

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.InputStream;
-import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -31,18 +31,18 @@ public class PdfController {
             
             // Passiamo le variabili d'ambiente (serve a Node per leggere RENDER_EXTERNAL_URL)
             pb.environment().putAll(System.getenv());
-            
-            // Uniamo gli errori all'output principale per non perdere i log di Node in caso di crash
-            pb.redirectErrorStream(true);
 
             Process process = pb.start();
 
             // Catturiamo i byte del PDF generato dallo script
             InputStream is = process.getInputStream();
             byte[] pdfBytes = is.readAllBytes();
+            byte[] errorBytes = process.getErrorStream().readAllBytes();
             int exitCode = process.waitFor();
 
             if (exitCode != 0) {
+                String errorLog = new String(errorBytes, StandardCharsets.UTF_8);
+                System.err.println("PDF generation failed for curriculum " + id + ": " + errorLog);
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
