@@ -78,7 +78,7 @@
                             </thead>
                             <tbody>
                                 <tr th:each="curriculum : ${curriculums}">
-                                    <td th:text="${curriculum.user.name}">Curriculum Name</td>
+                                    <td th:text="${curriculum.user != null ? curriculum.user.name : 'Utente non disponibile'}">Curriculum Name</td>
                                     <td>
                                         <a th:href="@{/curriculums/show/{id}(id=${curriculum.id})}" class="btn btn-sm btn-primary soft-shadow">View</a>
                                     </td>

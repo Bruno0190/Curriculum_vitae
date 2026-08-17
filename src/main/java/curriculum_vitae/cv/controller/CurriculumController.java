@@ -16,6 +16,7 @@ import curriculum_vitae.cv.repository.UserRepository;
 import curriculum_vitae.cv.service.FileStorage;
 import curriculum_vitae.cv.service.TranslationService;
 import java.util.*;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,6 +55,12 @@ public class CurriculumController {
         } else {
             curriculums = curriculumRepository.findAll();
         }
+
+        // Defensive filter: production data may contain orphan curricula without a linked user.
+        curriculums = curriculums.stream()
+                .filter(curriculum -> curriculum.getUser() != null)
+                .collect(Collectors.toList());
+
         model.addAttribute("curriculums", curriculums);
         return "index";
     }
@@ -172,6 +179,9 @@ public class CurriculumController {
             return "redirect:/?error=cv_not_found";
         }
         Curriculum curriculum = curriculumOpt.get();
+        if (curriculum.getUser() == null) {
+            return "redirect:/?error=cv_not_found";
+        }
         boolean isOwner = false;
         String authenticatedEmail = getAuthenticatedEmail(userDetails);
         if (authenticatedEmail != null) {

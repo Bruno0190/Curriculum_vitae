@@ -30,6 +30,8 @@ const fs = require('fs');
     .map((url) => url.replace(/\/$/, ''))
     .filter((value, index, self) => self.indexOf(value) === index);
 
+  process.stdout.write(`PDF_BASE_URL_CANDIDATES=${candidateBaseUrls.join(',')}`);
+
   let browser;
 
   try {
@@ -51,7 +53,12 @@ const fs = require('fs');
           timeout: 60000
         });
 
-        await page.waitForNetworkIdle({ idleTime: 500, timeout: 60000 });
+        // Some hosts keep background requests open; avoid hard-failing on network idle.
+        try {
+          await page.waitForNetworkIdle({ idleTime: 500, timeout: 15000 });
+        } catch {
+          // Continue with selector-based readiness below.
+        }
         await page.waitForSelector('#container_cv', { timeout: 10000 });
         await page.evaluate(async () => {
           if (document.fonts && document.fonts.ready) {
