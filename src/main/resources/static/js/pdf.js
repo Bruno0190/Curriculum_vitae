@@ -35,10 +35,16 @@ const fs = require('fs');
   let browser;
 
   try {
-    browser = await puppeteer.launch({
+    const launchOptions = {
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-    });
+    };
+
+    if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+      launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+    }
+
+    browser = await puppeteer.launch(launchOptions);
 
     const page = await browser.newPage();
     await page.emulateMediaType('print');
@@ -48,10 +54,18 @@ const fs = require('fs');
 
     for (const baseUrl of candidateBaseUrls) {
       try {
-        await page.goto(`${baseUrl}/curriculums/show/${curriculumId}`, {
+        const response = await page.goto(`${baseUrl}/curriculums/show/${curriculumId}`, {
           waitUntil: 'domcontentloaded',
           timeout: 60000
         });
+
+        if (!response) {
+          throw new Error(`Nessuna risposta HTTP da ${baseUrl}`);
+        }
+
+        if (response.status() >= 400) {
+          throw new Error(`HTTP ${response.status()} su ${response.url()}`);
+        }
 
         // Some hosts keep background requests open; avoid hard-failing on network idle.
         try {
@@ -69,7 +83,7 @@ const fs = require('fs');
         loaded = true;
         break;
       } catch (error) {
-        lastError = error;
+        lastError = new Error(`${baseUrl}: ${error.message}`);
       }
     }
 
