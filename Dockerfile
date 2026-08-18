@@ -2,31 +2,28 @@
 FROM maven:3.9.9-eclipse-temurin-17 AS build
 WORKDIR /app
 COPY . .
-RUN mvn clean package -DskipTests
+RUN mvn clean package -DskipTests && \
+	JAR_FILE=$(find target -maxdepth 1 -type f -name "*.jar" ! -name "*.jar.original" | head -n 1) && \
+	test -n "$JAR_FILE" && \
+	cp "$JAR_FILE" /app/app.jar && \
+	cp -a "$JAVA_HOME" /app/java-runtime
 
 # Fase 2: Esecuzione - Usiamo l'immagine ufficiale di Puppeteer (ha già Node + Chrome pronti e funzionanti)
 FROM ghcr.io/puppeteer/puppeteer:22.6.0
 
-# Diventiamo root temporaneamente per installare Java senza rompere i permessi
+# Diventiamo root temporaneamente per copiare Java runtime
 USER root
 
-# Rimuoviamo eventuali repository Chrome legacy con chiavi non valide e installiamo Java 17.
-RUN set -eux; \
-	for file in /etc/apt/sources.list /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources; do \
-		if [ -f "$file" ]; then \
-			sed -i '/dl-ssl.google.com\/linux\/chrome\/deb/d;/dl.google.com\/linux\/chrome\/deb/d' "$file"; \
-		fi; \
-	done; \
-	apt-get update; \
-	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends openjdk-17-jre-headless ca-certificates; \
-	apt-get clean; \
-	rm -rf /var/lib/apt/lists/*
+# Evitiamo apt nel runtime (meno fragile su Render): portiamo Java dallo stage build.
+COPY --from=build /app/java-runtime /opt/java/openjdk
+ENV JAVA_HOME=/opt/java/openjdk
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
 # Configura la cartella di lavoro
 WORKDIR /app
 
 # Copiamo il file JAR compilato dalla Fase 1
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/app.jar /app/app.jar
 
 # Copiamo i sorgenti e il package.json per far trovare pdf.js a Node
 COPY --from=build /app/src /app/src
